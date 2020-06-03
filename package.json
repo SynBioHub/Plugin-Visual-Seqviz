@@ -5,27 +5,50 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config ./config/webpack.prod.config.js"
+    "build": "webpack --config ./config/webpack.dev.config.js",
+    "dev": "webpack --config ./config/webpack.build.js --display-error-details --verbose && nodemon --exec babel-node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.10.1",
     "@babel/core": "^7.10.0",
-    "@babel/plugin-transform-runtime": "^7.10.0",
+    "@babel/node": "^7.10.1",
+    "@babel/plugin-proposal-class-properties": "^7.10.1",
+    "@babel/plugin-proposal-object-rest-spread": "^7.10.1",
+    "@babel/plugin-transform-runtime": "^7.10.1",
+    "@babel/polyfill": "^7.10.1",
     "@babel/preset-env": "^7.10.0",
     "@babel/preset-react": "^7.10.0",
     "babel-loader": "^8.1.0",
+    "babel-plugin-css-modules-transform": "^1.6.2",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "babel-plugin-transform-imports": "^2.0.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "css-loader": "^3.5.3",
+    "csv-loader": "^3.0.3",
+    "file-loader": "^6.0.0",
     "html-webpack-plugin": "^4.3.0",
+    "image-webpack-loader": "^6.0.0",
+    "regenerator-runtime": "^0.13.5",
+    "style-loader": "^1.2.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^4.2.2",
+    "xml-loader": "^1.2.1"
   },
   "dependencies": {
-    "@babel/runtime": "^7.10.0",
+    "@babel/runtime": "^7.10.2",
+    "compression": "^1.7.4",
     "core-js": "^3.6.5",
+    "express": "^4.17.1",
+    "handlebars": "^4.7.6",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "seqviz": "^3.0.23"
+    "react-sizeme": "^2.6.12",
+    "seqviz": "^3.0.23",
+    "serialize-javascript": "^3.1.0"
   }
 }
