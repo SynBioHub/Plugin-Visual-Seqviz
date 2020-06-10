@@ -1,4 +1,6 @@
 const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
 module.exports = {
   entry: {
     // vendor: ["@babel/polyfill", "react","react-dom"],
@@ -12,6 +14,7 @@ module.exports = {
     umdNamedDefine: true,
     globalObject: "this",
   },
+  mode: "production",
   resolve: {
     extensions: ["", ".js", ".jsx"]
   },
@@ -68,9 +71,8 @@ module.exports = {
   //   new webpack.BannerPlugin(banner)
   //   new BundleAnalyzerPlugin({ defaultSizes: "stat" })
   // ],
-  // optimization: {
-  //   nodeEnv: "production",
-  //   minimize: true,
-  //   concatenateModules: true
-  // }
+  optimization: {
+    nodeEnv: "production",
+    minimizer: [new UglifyJsPlugin()]
+  }
 };

@@ -10,7 +10,7 @@ import CentralIndexContext from "./handlers/centralIndex";
  * a parent sequence viewer component that holds whatever is common between
  * the linear and circular sequence viewers. The Header is an example
  */
-export default class SeqViewer extends React.Component {
+class SeqViewer extends React.Component {
   constructor(props) {
     super(props);
     const { size } = props;
@@ -59,7 +59,7 @@ See: https://github.com/Lattice-Automation/seqviz#optionsstyle-`);
     }
 
     if (bpsPerBlock < seq.length) {
-      size.width -= 28; // -28 px for the padding (10px) + scroll bar (18px)
+      // size.width -= 28; // -28 px for the padding (10px) + scroll bar (18px)
     }
 
     const charWidth = size.width / bpsPerBlock; // width of each basepair
@@ -148,17 +148,17 @@ See: https://github.com/Lattice-Automation/seqviz#optionsstyle-`);
             )}
           </CentralIndexContext.Consumer>
         ) : (
-          <LinearViewer
-            {...this.props}
-            {...this.state}
-            {...this.linearProps()}
-            seqLength={seq.length}
-            cutSites={cutSites}
-          />
-        )}
+            <LinearViewer
+              {...this.props}
+              {...this.state}
+              {...this.linearProps()}
+              seqLength={seq.length}
+              cutSites={cutSites}
+            />
+          )}
       </div>
     );
   }
 }
 
-// export default sizeMe({ monitorHeight: true })(SeqViewer);
+export default sizeMe({ monitorHeight: true })(SeqViewer);

@@ -34,6 +34,7 @@
     "image-webpack-loader": "^6.0.0",
     "regenerator-runtime": "^0.13.5",
     "style-loader": "^1.2.1",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "webpack-merge": "^4.2.2",
@@ -48,7 +49,9 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-sizeme": "^2.6.12",
+    "request": "^2.88.2",
     "seqviz": "^3.0.23",
-    "serialize-javascript": "^3.1.0"
+    "serialize-javascript": "^3.1.0",
+    "xml2js": "^0.4.23"
   }
 }

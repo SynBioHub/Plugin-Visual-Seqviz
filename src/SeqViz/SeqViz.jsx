@@ -66,9 +66,9 @@ export default class SeqViz extends React.Component {
   };
 
   static defaultProps = {
-    size:{
+    size: {
       height: 500,
-      width:1000,
+      width: 1000,
     },
     accession: "",
     annotations: [],

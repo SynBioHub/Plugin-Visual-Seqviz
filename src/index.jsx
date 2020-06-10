@@ -28,8 +28,9 @@ const defaultProps = {
 };
 console.log(fileContents);
 const file = new File([fileContents], fileName, { type: "text/plain" });
+console.log(file);
 
 ReactDOM.render(
-    <SeqViz file={file} />,
+  <SeqViz file={file} />,
   document.getElementById('root')
 );

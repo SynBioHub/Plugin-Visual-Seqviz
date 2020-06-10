@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    index: './src/index.jsx',
+    index: './src/index.js',
   },
   output: {
     filename: 'js/bundle.js',
@@ -14,14 +14,15 @@ module.exports = {
     tls: "empty"
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: "babel-loader",
         options: {
           presets: [
-            ["@babel/preset-env", { modules: false }],
+            ["@babel/preset-env", {
+              modules: false
+            }],
             "@babel/preset-react"
           ],
           plugins: [
