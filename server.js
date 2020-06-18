@@ -27,25 +27,27 @@ app.post('/Evaluate', function (req, res) {
 })
 
 app.post('/Run', async (req, res) => {
-  let url = req.body.complete_sbol.toString();
-  console.log(url);
-  request.get(url, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var csv = body;
+  let type = req.body.type.toString();
+  if (type === 'Collection') res.end();
+  else {
+    let url = req.body.complete_sbol.toString();
+    request.get(url, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        var csv = body;
 
-      const propdata = {
-        style: {
-          height: 600,
-          width: 1000
-        },
-        size: {
-          width: 500,
-          height: 600
-        },
-        file: csv,
-      }
+        const propdata = {
+          style: {
+            height: 600,
+            width: 1000
+          },
+          size: {
+            width: 500,
+            height: 600
+          },
+          file: csv,
+        }
 
-      const theHtml = `<!doctype html>
+        const theHtml = `<!doctype html>
       <html>
       <head><title>sequence view</title></head>
       <body>
@@ -55,9 +57,10 @@ app.post('/Run', async (req, res) => {
       </body>
       </html>
       `;
-      res.send(theHtml);
-    }
-  })
+        res.send(theHtml);
+      }
+    })
+  }
   // const fileName = path.join(
   //   __dirname,
   //   "src",

@@ -1,6 +1,13 @@
-import { partFactory, dnaComplement } from "../../utils/parser";
-import { annotationFactory } from "../../utils/sequence";
-import xml2js, { processors } from "xml2js";
+import {
+  partFactory,
+  dnaComplement
+} from "../../utils/parser";
+import {
+  annotationFactory
+} from "../../utils/sequence";
+import xml2js, {
+  processors
+} from "xml2js";
 
 /**
  * SBOL v2.0 schema definition can be found at: http://sbolstandard.org/wp-content/uploads/2016/06/SBOL-data-model-2.2.1.pdf
@@ -34,8 +41,7 @@ export default async (sbol, fileName, colors = []) =>
     const fileString = sbol.replace(/“|”/g, '"');
 
     xml2js.parseString(
-      fileString,
-      {
+      fileString, {
         xmlns: true,
         attrkey: "xml_tag",
         tagNameProcessors: [processors.stripPrefix]
@@ -47,7 +53,9 @@ export default async (sbol, fileName, colors = []) =>
 
         let RDF = null;
         if (parsedSBOL.RDF) {
-          ({ RDF } = parsedSBOL);
+          ({
+            RDF
+          } = parsedSBOL);
         }
 
         if (!RDF) {
@@ -55,7 +63,10 @@ export default async (sbol, fileName, colors = []) =>
         }
 
         // check if anything is defined, return if not
-        const { ComponentDefinition, Sequence } = RDF;
+        const {
+          ComponentDefinition,
+          Sequence
+        } = RDF;
         if (!ComponentDefinition || !ComponentDefinition.length || !Sequence) {
           resolve([]);
         }
@@ -68,15 +79,25 @@ export default async (sbol, fileName, colors = []) =>
             return;
           }
 
-          const { displayId, description, sequence, sequenceAnnotation } = c;
-          const name = first(displayId) || `${fileName}_${i + 1}`;
+          const {
+            displayId,
+            title,
+            description,
+            sequence,
+            sequenceAnnotation
+          } = c;
+          const name = first(title) || first(displayId) || `${fileName}_${i + 1}`;
           const note = first(description) || "";
 
           const annotations = [];
-          (sequenceAnnotation || []).forEach(({ SequenceAnnotation }) => {
+          (sequenceAnnotation || []).forEach(({
+            SequenceAnnotation
+          }) => {
             const ann = SequenceAnnotation[0];
-            const annId = first(ann.displayId);
-            const { Range } = ann.location[0];
+            const annId = first(ann.title) || first(ann.displayId);
+            const {
+              Range
+            } = ann.location[0];
 
             const range = Range[0];
             annotations.push({
@@ -92,16 +113,19 @@ export default async (sbol, fileName, colors = []) =>
           // try and find sequence data
           const partSeq = Sequence.find(
             s =>
-              (s.persistentIdentity &&
-                s.persistentIdentity.length &&
-                s.persistentIdentity[0].xml_tag["rdf:resource"].value ===
-                  seqID) ||
-              s.xml_tag["rdf:about"].value === seqID
+            (s.persistentIdentity &&
+              s.persistentIdentity.length &&
+              s.persistentIdentity[0].xml_tag["rdf:resource"].value ===
+              seqID) ||
+            s.xml_tag["rdf:about"].value === seqID
           );
 
           if (partSeq && partSeq.elements) {
             const seqInput = first(partSeq.elements) || "";
-            const { seq, compSeq } = dnaComplement(seqInput);
+            const {
+              seq,
+              compSeq
+            } = dnaComplement(seqInput);
             partList.push({
               ...partFactory(),
               name,
