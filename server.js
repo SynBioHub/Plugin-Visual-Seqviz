@@ -23,12 +23,17 @@ app.get('/Status', function (req, res) {
 })
 
 app.post('/Evaluate', function (req, res) {
-  res.status(200).send('The app can handle this input')
+  let type = req.body.type.toString();
+  if (type === 'Component') {
+    res.status(200).send('The app can handle this input');
+  } else {
+    res.status(404).end();
+  }
 })
 
 app.post('/Run', async (req, res) => {
   let type = req.body.type.toString();
-  if (type === 'Collection') res.end();
+  if (type === 'Collection') res.status(404).end();
   else {
     let url = req.body.complete_sbol.toString();
     request.get(url, function (error, response, body) {
