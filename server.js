@@ -12,7 +12,7 @@ import filesToParts from "./src/io/filesToParts";
 import serialize from "serialize-javascript";
 
 const app = express()
-const port = 3000
+const port = 5000
 const addr = "localhost"
 
 app.use(express.json());
