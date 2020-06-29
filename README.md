@@ -1,4 +1,4 @@
-## start
+## Start
 ```
 // install all the dependencies
 npm install
