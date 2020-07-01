@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config ./config/webpack.dev.config.js",
-    "start": "webpack --config ./config/webpack.build.js --display-error-details --verbose && nodemon --exec babel-node server.js"
+    "start": "node server.js",
+    "dev": "webpack --config ./config/webpack.build.js --display-error-details --verbose && nodemon --exec babel-node server.js"
   },
   "keywords": [],
   "author": "",
