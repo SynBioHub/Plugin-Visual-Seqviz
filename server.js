@@ -10,7 +10,11 @@ const port = 5000
 const addr = "localhost"
 
 app.use(express.json());
-app.use(express.static("public"));
+//app.use(express.static("public"));
+
+app.get('/seqviz.js', function (req, res){
+	res.sendFile(path.join(__dirname, 'public', 'seqviz.js'));
+})
 
 app.get('/Status', function (req, res) {
   res.status(200).send('The plugin is up and running')
