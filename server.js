@@ -31,6 +31,7 @@ app.post('/Run', async (req, res) => {
   else {
     let url = req.body.complete_sbol.toString();
     let hostAddr = req.get('host')
+    console.log(hostAddr)
     request.get(url, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var csv = body;
@@ -48,16 +49,18 @@ app.post('/Run', async (req, res) => {
         }
 
         const theHtml = `<!doctype html>
-      <html>
-      <head><title>sequence view</title></head>
-      <body>
-      <div id="reactele"></div>
-      <script type="text/javascript">window.__INITIAL_DATA__ = ${serialize(propdata)}</script>
-      <script type="text/javascript" src="http://${hostAddr}/seqviz.js" charset="utf-8"></script>
-      </body>
-      </html>
-      `;
+                        <html>
+                        <head><title>sequence view</title></head>
+                        <body>
+                        <div id="reactele"></div>
+                        <script type="text/javascript">window.__INITIAL_DATA__ = ${serialize(propdata)}</script>
+                        <script type="text/javascript" src="http://${hostAddr}/seqviz.js" charset="utf-8"></script>
+                        </body>
+                        </html>
+                        `;
         res.send(theHtml);
+      } else {
+        console.log(error);
       }
     })
   }

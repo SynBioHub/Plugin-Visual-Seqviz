@@ -93,19 +93,37 @@ export default async (sbol, fileName, colors = []) =>
           (sequenceAnnotation || []).forEach(({
             SequenceAnnotation
           }) => {
-            const ann = SequenceAnnotation[0];
-            const annId = first(ann.title) || first(ann.displayId);
-            const {
-              Range
-            } = ann.location[0];
+            SequenceAnnotation.forEach((SequenceAnnotation) => {
+              const ann = SequenceAnnotation;
+              const annId = first(ann.title) || first(ann.displayId);
+              const Location = ann.location;
+              Location.forEach((location) => {
+                const {
+                  Range
+                } = location;
+                Range.forEach((range) => {
+                  annotations.push({
+                    ...annotationFactory(annId),
+                    name: annId,
+                    start: first(range.start) - 1,
+                    end: first(range.end)
+                  });
+                })
+              })
+            })
+            // const ann = SequenceAnnotation[0];
+            // const annId = first(ann.title) || first(ann.displayId);
+            // const {
+            //   Range
+            // } = ann.location[0];
 
-            const range = Range[0];
-            annotations.push({
-              ...annotationFactory(annId),
-              name: annId,
-              start: first(range.start) - 1,
-              end: first(range.end) - 1
-            });
+            // const range = Range[0];
+            // annotations.push({
+            //   ...annotationFactory(annId),
+            //   name: annId,
+            //   start: first(range.start) - 1,
+            //   end: first(range.end)
+            // });
           });
 
           const seqID = sequence[0].xml_tag["rdf:resource"].value;
