@@ -58,7 +58,7 @@ app.post('/Run', async (req, res) => {
                         <body>
                         <div id="reactele"></div>
                         <script type="text/javascript">window.__INITIAL_DATA__ = ${serialize(propdata)}</script>
-                        <script type="text/javascript" src="http://${hostAddr}/seqviz.js" charset="utf-8"></script>
+                        <script type="text/javascript" src="${hostAddr}/seqviz.js" charset="utf-8"></script>
                         </body>
                         </html>
                         `;
