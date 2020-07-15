@@ -276,7 +276,7 @@ export default class InfiniteScroll extends React.PureComponent {
         ref={this.scroller}
         onScroll={this.handleScrollOrResize}
         onMouseOver={this.handleMouseOver}
-        onFocus={() => {}}
+        onFocus={() => { }}
       >
         <div
           className="la-vz-seqblock-container"

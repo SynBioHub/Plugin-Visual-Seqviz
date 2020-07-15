@@ -12,8 +12,8 @@ const addr = "localhost"
 app.use(express.json());
 //app.use(express.static("public"));
 
-app.get('/seqviz.js', function (req, res){
-	res.sendFile(path.join(__dirname, 'public', 'seqviz.js'));
+app.get('/seqviz.js', function (req, res) {
+  res.sendFile(path.join(__dirname, 'public', 'seqviz.js'));
 })
 
 app.get('/Status', function (req, res) {
@@ -35,7 +35,6 @@ app.post('/Run', async (req, res) => {
   else {
     let url = req.body.complete_sbol.toString();
     let hostAddr = req.get('host')
-    console.log(hostAddr)
     request.get(url, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var csv = body;

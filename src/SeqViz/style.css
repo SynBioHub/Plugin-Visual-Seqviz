@@ -112,3 +112,12 @@
   border-radius: 7px;
   background-color: #ececec;
 }
+
+#linear-tooltip {
+  background: cornsilk;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  display: none;
+}

@@ -305,6 +305,8 @@ export default class SeqViz extends React.Component {
             {viewers.filter(v => v).map(v => v)}
           </SelectionContext.Provider>
         </CentralIndexContext.Provider>
+        <div id="linear-tooltip">
+        </div>
       </div>
     );
   }

@@ -48,10 +48,24 @@ export default class AnnotationRows extends React.PureComponent {
  * vertically stacked on top of one another in non-overlapping arrays
  */
 class AnnotationRow extends React.PureComponent {
-  hoverOtherAnnotationRows = (className, opacity) => {
+  hoverOtherAnnotationRows = (event, className, opacity, isTooltipShown, text) => {
     const elements = document.getElementsByClassName(className);
     for (let i = 0; i < elements.length; i += 1) {
       elements[i].style.fillOpacity = opacity;
+    }
+    if (isTooltipShown) {
+      let view = document.getElementsByClassName('la-vz-seqviz')[0].getBoundingClientRect();
+      // console.log(event.clientX, event.clientY, event.offsetX, event.offsetY, linear)
+      let left = event.clientX - view.left;
+      let top = event.clientY - view.top;
+      let tooltip = document.getElementById("linear-tooltip");
+      tooltip.innerHTML = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = left + 'px';
+      tooltip.style.top = top + 'px';
+    } else {
+      let tooltip = document.getElementById("linear-tooltip");
+      tooltip.style.display = "none";
     }
   };
 
@@ -245,8 +259,8 @@ class AnnotationRow extends React.PureComponent {
         }}
         {...rectProps}
         d={linePath}
-        onMouseOver={() => this.hoverOtherAnnotationRows(a.id, 1.0)}
-        onMouseOut={() => this.hoverOtherAnnotationRows(a.id, 0.7)}
+        onMouseOver={(event) => this.hoverOtherAnnotationRows(event, a.id, 1.0, true, name)}
+        onMouseOut={(event) => this.hoverOtherAnnotationRows(event, a.id, 0.7, false, name)}
         onFocus={() => 0}
         onBlur={() => 0}
       />
@@ -268,10 +282,10 @@ class AnnotationRow extends React.PureComponent {
             fontSize={11}
             {...textProps}
             id={a.id}
-            onMouseOver={() => this.hoverOtherAnnotationRows(a.id, 1.0)}
-            onMouseOut={() => this.hoverOtherAnnotationRows(a.id, 0.7)}
-            onFocus={() => {}}
-            onBlur={() => {}}
+            onMouseOver={(event) => this.hoverOtherAnnotationRows(event, a.id, 1.0, true, name)}
+            onMouseOut={(event) => this.hoverOtherAnnotationRows(event, a.id, 0.7, false, name)}
+            onFocus={() => { }}
+            onBlur={() => { }}
           >
             {name}
           </text>
