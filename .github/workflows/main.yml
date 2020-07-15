@@ -14,7 +14,7 @@ jobs:
       name: Checkout source code
     - name: Build the Docker image
       run: |
-        docker build . --tag synbiohub/plugin-sequence-viewer-js:snapshot
+        docker build . --tag synbiohub/plugin-visual-sequviz:snapshot
     - uses: azure/docker-login@v1
       with:
           username: ${{ secrets.DOCKER_USERNAME }}
