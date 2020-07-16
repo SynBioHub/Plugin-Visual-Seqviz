@@ -37,7 +37,7 @@ class Circular extends React.Component {
      * But, a gene that's 15k on the same plasmid shouldn't have it's label outside the plasmid
      * when it can easily fit on top of the annotation itself
      */
-    const seqLength = nextProps.seq.length;
+    const seqLength = nextProps.seq.length + 1;
     const cutSiteLabels = nextProps.cutSites;
     const { radius } = nextProps;
     let innerRadius = radius - 3 * lineHeight;
@@ -77,7 +77,7 @@ class Circular extends React.Component {
     );
 
     return {
-      seqLength: nextProps.seq.length,
+      seqLength: nextProps.seq.length + 1,
       lineHeight: lineHeight,
       annotationsInRows: annotationsInRows,
       primersInRows: primersInRows,

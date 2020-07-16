@@ -42,7 +42,7 @@ app.post('/Run', async (req, res) => {
         const propdata = {
           style: {
             height: 600,
-            width: 1000
+            width: 1100
           },
           size: {
             width: 500,
