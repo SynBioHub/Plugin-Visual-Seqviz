@@ -44,15 +44,14 @@
   "dependencies": {
     "@babel/runtime": "^7.10.2",
     "bufferpack": "0.0.6",
-    "compression": "^1.7.4",
     "core-js": "^3.6.5",
     "express": "^4.17.1",
-    "handlebars": "^4.7.6",
     "node-fetch": "^2.6.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-sizeme": "^2.6.12",
     "request": "^2.88.2",
+    "sboljs": "^2.2.5",
     "serialize-javascript": "^3.1.0",
     "xml2js": "^0.4.23"
   }

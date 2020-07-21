@@ -155,7 +155,7 @@ const SingleAnnotation = props => {
       <path
         d={path}
         id={a.id}
-        className={a.id}
+        className={a.annId}
         ref={inputRef(a.id, {
           ref: a.id,
           start: a.start,
@@ -165,20 +165,20 @@ const SingleAnnotation = props => {
         })}
         fill={a.color}
         stroke={COLOR_BORDER_MAP[a.color] || calcBorderColor(a.color)}
-        onMouseOver={() => hoverAnnotation(a.id, 1.0)}
-        onMouseOut={() => hoverAnnotation(a.id, 0.7)}
-        onFocus={() => {}}
-        onBlur={() => {}}
+        onMouseOver={() => hoverAnnotation(a.annId, 1.0)}
+        onMouseOut={() => hoverAnnotation(a.annId, 0.7)}
+        onFocus={() => { }}
+        onBlur={() => { }}
         {...annStyle}
       />
       {inlinedAnnotations.includes(a.id) && (
         <text
           id={a.id}
           dy={-0.4 * lineHeight}
-          onMouseOver={() => hoverAnnotation(a.id, 1.0)}
-          onMouseOut={() => hoverAnnotation(a.id, 0.7)}
-          onFocus={() => {}}
-          onBlur={() => {}}
+          onMouseOver={() => hoverAnnotation(a.annId, 1.0)}
+          onMouseOut={() => hoverAnnotation(a.annId, 0.7)}
+          onFocus={() => { }}
+          onBlur={() => { }}
         >
           <textPath
             id={a.id}
