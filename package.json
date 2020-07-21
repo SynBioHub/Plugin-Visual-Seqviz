@@ -51,7 +51,6 @@
     "react-dom": "^16.13.1",
     "react-sizeme": "^2.6.12",
     "request": "^2.88.2",
-    "sboljs": "^2.2.5",
     "serialize-javascript": "^3.1.0",
     "xml2js": "^0.4.23"
   }
