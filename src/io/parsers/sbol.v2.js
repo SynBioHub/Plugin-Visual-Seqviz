@@ -122,7 +122,7 @@ export default async (sbol, fileName, colors = []) =>
 
               var tooltip = '';
 
-              // If it is a component
+              // If the sequence annotation denotes a component
               if (ann.component && ann.component.length) {
                 tooltip = '<b style="text-align:center;display:block">Component</b>';
                 const componentRes = ann.component[0].xml_tag["rdf:resource"].value;
@@ -145,7 +145,9 @@ export default async (sbol, fileName, colors = []) =>
                     tooltip += '<b>Description:</b> ' + first(linkedComponentDef.description) + '<br/>';
                   }
                 }
-              } else {
+              }
+              // else the sequence annotation denotes a feature
+              else {
                 tooltip = '<b style="text-align:center;display:block">Feature</b>';
                 if (first(ann.displayId)) tooltip += '<b>Identifier:</b> ' + first(ann.displayId) + '<br/>';
                 if (first(ann.title)) tooltip += '<b>Name:</b> ' + first(ann.title) + '<br/>';
