@@ -97,9 +97,10 @@ export default async (sbol, fileName, colors = []) =>
           const name = first(title) || first(displayId) || `${fileName}_${i + 1}`;
           const note = first(description) || "";
 
+          var componentarr = [];
           if (component) {
-            const components = component.map((Components) => Components.Component.map((com) => com));
-            const componentarr = [].concat.apply([], components);
+            let components = component.map((Components) => Components.Component.map((com) => com));
+            componentarr = [].concat.apply([], components);
           }
 
           const annotations = [];
@@ -123,7 +124,7 @@ export default async (sbol, fileName, colors = []) =>
 
               // If it is a component
               if (ann.component && ann.component.length) {
-                tooltip = 'Component\n'
+                tooltip = '<b style="text-align:center;display:block">Component</b>';
                 const componentRes = ann.component[0].xml_tag["rdf:resource"].value;
                 const linkedComponent = componentarr.find(
                   com => com.xml_tag["rdf:about"].value === componentRes
@@ -135,20 +136,20 @@ export default async (sbol, fileName, colors = []) =>
                   annName = first(linkedComponentDef.title) || first(linkedComponentDef.displayId);
                   roles = roles.concat(linkedComponentDef.role);
                   if (first(linkedComponentDef.displayId)) {
-                    tooltip += 'Identifier: ' + first(linkedComponentDef.displayId) + '\n';
+                    tooltip += '<b>Identifier:</b> ' + first(linkedComponentDef.displayId) + '<br/>';
                   }
                   if (first(linkedComponentDef.title)) {
-                    tooltip += 'Name: ' + first(linkedComponentDef.title) + '\n';
+                    tooltip += '<b>Name:</b> ' + first(linkedComponentDef.title) + '<br/>';
                   }
                   if (first(linkedComponentDef.description)) {
-                    tooltip += 'Description: ' + first(linkedComponentDef.description) + '\n';
+                    tooltip += '<b>Description:</b> ' + first(linkedComponentDef.description) + '<br/>';
                   }
                 }
               } else {
-                tooltip = 'Feature\n'
-                if (first(ann.displayId)) tooltip += 'Identifier: ' + first(ann.displayId) + '\n';
-                if (first(ann.title)) tooltip += 'Name: ' + first(ann.title) + '\n';
-                if (first(sequenceAnnotation.description)) tooltip += 'Description: ' + first(sequenceAnnotation.description) + '\n';
+                tooltip = '<b style="text-align:center;display:block">Feature</b>';
+                if (first(ann.displayId)) tooltip += '<b>Identifier:</b> ' + first(ann.displayId) + '<br/>';
+                if (first(ann.title)) tooltip += '<b>Name:</b> ' + first(ann.title) + '<br/>';
+                if (first(sequenceAnnotation.description)) tooltip += '<b>Description:</b> ' + first(sequenceAnnotation.description) + '<br/>';
               }
 
               if (roles.length > 0) {
@@ -158,53 +159,54 @@ export default async (sbol, fileName, colors = []) =>
                   var igemFeaturePrefix = 'http://wiki.synbiohub.org/wiki/Terms/igem#feature/';
                   var soPrefix = 'http://identifiers.org/so/';
                   if (role.indexOf(igemPartPrefix) === 0) {
-                    tooltip += 'iGEM Part Type: ' + role.slice(igemPartPrefix.length) + '\n';
+                    tooltip += 'iGEM Part Type: ' + role.slice(igemPartPrefix.length) + '<br/>';
                   } else if (role.indexOf(igemFeaturePrefix) === 0) {
-                    tooltip += 'iGEM Feature Type: ' + role.slice(igemFeaturePrefix.length) + '\n';
+                    tooltip += 'iGEM Feature Type: ' + role.slice(igemFeaturePrefix.length) + '<br/>';
                   } else if (role.indexOf(soPrefix) === 0) {
                     var soTerm = role.slice(soPrefix.length).split('_').join(':');
                     var role = soTerm;
                     if (sequenceOntology[soTerm]) {
                       role = sequenceOntology[soTerm].name
                     }
-                    tooltip += 'Role: ' + role + '\n';
+                    tooltip += '<b>Role:</b> ' + role + '<br/>';
                   }
                 })
               }
 
               const ranges = Location.map(location => location.Range.map(range => range));
               const rangesarr = [].concat.apply([], ranges);
-              console.log(rangesarr);
 
-              Location.forEach((location) => {
-                const {
-                  Range
-                } = location;
-                Range.forEach((range) => {
-                  annotations.push({
-                    ...annotationFactory(annName),
-                    annId: annId,
-                    name: annName,
-                    color: color,
-                    start: first(range.start) - 1,
-                    end: first(range.end)
-                  });
+              rangesarr.sort((a, b) => first(a.start) - first(b.start))
+
+              rangesarr.forEach((range, i) => {
+                let loc = '';
+                rangesarr.forEach((range, j) => {
+                  if (i === j) {
+                    let boldloc = '';
+                    if (range.orientation) {
+                      boldloc = '> Orientation: ' + range.orientation[0].xml_tag["rdf:resource"].value.replace('http://sbols.org/v2#', '') + ' ';
+                    }
+                    boldloc += first(range.start) + '..' + first(range.end) + '<br/>';
+                    loc += boldloc.bold();
+                  } else {
+                    if (range.orientation) {
+                      loc += 'Orientation: ' + range.orientation[0].xml_tag["rdf:resource"].value.replace('http://sbols.org/v2#', '') + ' ';
+                    }
+                    loc += first(range.start) + '..' + first(range.end) + '<br/>';
+                  }
                 })
+                annotations.push({
+                  ...annotationFactory(annName),
+                  annId: annId,
+                  name: annName,
+                  color: color,
+                  start: first(range.start) - 1,
+                  end: first(range.end),
+                  tooltip: tooltip + loc,
+                  uri: uri
+                });
               })
-            })
-            // const ann = SequenceAnnotation[0];
-            // const annId = first(ann.title) || first(ann.displayId);
-            // const {
-            //   Range
-            // } = ann.location[0];
-
-            // const range = Range[0];
-            // annotations.push({
-            //   ...annotationFactory(annId),
-            //   name: annId,
-            //   start: first(range.start) - 1,
-            //   end: first(range.end)
-            // });
+            });
           });
 
           const seqID = sequence[0].xml_tag["rdf:resource"].value;
@@ -243,6 +245,5 @@ export default async (sbol, fileName, colors = []) =>
 
         // nothing in root
         resolve([]);
-      }
-    );
+      });
   });

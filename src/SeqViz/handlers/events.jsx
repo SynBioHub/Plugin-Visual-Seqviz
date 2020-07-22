@@ -2,6 +2,7 @@ import * as React from "react";
 
 import debounce from "../../utils/debounce";
 import CentralIndexContext from "./centralIndex";
+import { renderToStaticNodeStream } from 'react-dom/server';
 
 /**
  * an HOC used one level above the Sequence viewer. It handles the routing of all
@@ -145,9 +146,9 @@ const withEventRouter = WrappedComp =>
             clockwise =
               selLength === 0
                 ? type === "ArrowRight" ||
-                  type === "ShiftArrowRight" ||
-                  type === "ArrowDown" ||
-                  type === "ShiftArrowDown"
+                type === "ShiftArrowRight" ||
+                type === "ArrowDown" ||
+                type === "ShiftArrowDown"
                 : clockwise;
             if (newPos !== start && !type.startsWith("Shift")) {
               setSelection({
@@ -226,6 +227,13 @@ const withEventRouter = WrappedComp =>
       this.selectAllHotkey();
     };
 
+    handleDoubleClick = (target) => {
+      const uri = target.getAttribute('uri');
+      if (uri) {
+        window.location.assign(uri);
+      }
+    }
+
     resetClicked = debounce(() => {
       this.clickedOnce = null;
       this.clickedTwice = null;
@@ -254,6 +262,7 @@ const withEventRouter = WrappedComp =>
           this.clickedOnce === e.target &&
           this.clickedTwice === null
         ) {
+          this.handleDoubleClick(e.target);
           this.clickedOnce = e.target;
           this.clickedTwice = e.target;
           this.resetClicked();

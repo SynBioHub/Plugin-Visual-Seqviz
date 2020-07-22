@@ -3,6 +3,28 @@ import * as React from "react";
 import { COLOR_BORDER_MAP, darkerColor } from "../../../utils/colors";
 
 export default class AnnotationRows extends React.PureComponent {
+  hoverOtherAnnotationRows = (event, className, opacity, isTooltipShown, text) => {
+    event.stopPropagation();
+    const elements = document.getElementsByClassName(className);
+    for (let i = 0; i < elements.length; i += 1) {
+      elements[i].style.fillOpacity = opacity;
+    }
+    if (isTooltipShown) {
+      let view = document.getElementsByClassName('la-vz-seqviz')[0].getBoundingClientRect();
+      // console.log(event.clientX, event.clientY, event.offsetX, event.offsetY, linear)
+      let left = event.clientX - view.left;
+      let top = event.clientY - view.top;
+      let tooltip = document.getElementById("linear-tooltip");
+      tooltip.innerHTML = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = left + 20 + 'px';
+      tooltip.style.top = top + 'px';
+    } else {
+      let tooltip = document.getElementById("linear-tooltip");
+      tooltip.style.display = "none";
+    }
+  };
+
   render() {
     const {
       annotationRows,
@@ -14,7 +36,7 @@ export default class AnnotationRows extends React.PureComponent {
       firstBase,
       lastBase,
       fullSeq,
-      elementHeight
+      elementHeight,
     } = this.props;
 
     return (
@@ -35,6 +57,7 @@ export default class AnnotationRows extends React.PureComponent {
               firstBase={firstBase}
               lastBase={lastBase}
               fullSeq={fullSeq}
+              hoverOtherAnnotationRows={this.hoverOtherAnnotationRows}
             />
           );
         })}
@@ -48,27 +71,6 @@ export default class AnnotationRows extends React.PureComponent {
  * vertically stacked on top of one another in non-overlapping arrays
  */
 class AnnotationRow extends React.PureComponent {
-  hoverOtherAnnotationRows = (event, className, opacity, isTooltipShown, text) => {
-    const elements = document.getElementsByClassName(className);
-    for (let i = 0; i < elements.length; i += 1) {
-      elements[i].style.fillOpacity = opacity;
-    }
-    if (isTooltipShown) {
-      let view = document.getElementsByClassName('la-vz-seqviz')[0].getBoundingClientRect();
-      // console.log(event.clientX, event.clientY, event.offsetX, event.offsetY, linear)
-      let left = event.clientX - view.left;
-      let top = event.clientY - view.top;
-      let tooltip = document.getElementById("linear-tooltip");
-      tooltip.innerHTML = text;
-      tooltip.style.display = "block";
-      tooltip.style.left = left + 'px';
-      tooltip.style.top = top + 'px';
-    } else {
-      let tooltip = document.getElementById("linear-tooltip");
-      tooltip.style.display = "none";
-    }
-  };
-
   renderAnnotation = (a, index) => {
     const {
       inputRef,
@@ -78,7 +80,8 @@ class AnnotationRow extends React.PureComponent {
       lastBase,
       annotations,
       fullSeq,
-      bpsPerBlock
+      bpsPerBlock,
+      hoverOtherAnnotationRows
     } = this.props;
 
     const { color, name, direction, start, end } = a;
@@ -249,7 +252,8 @@ class AnnotationRow extends React.PureComponent {
           type: "ANNOTATION",
           element: seqBlockRef
         })}
-        className={a.id}
+        uri={a.uri}
+        className={a.annId}
         style={{
           fillOpacity: 0.7,
           cursor: "pointer",
@@ -259,8 +263,8 @@ class AnnotationRow extends React.PureComponent {
         }}
         {...rectProps}
         d={linePath}
-        onMouseOver={(event) => this.hoverOtherAnnotationRows(event, a.id, 1.0, true, name)}
-        onMouseOut={(event) => this.hoverOtherAnnotationRows(event, a.id, 0.7, false, name)}
+        onMouseEnter={(event) => hoverOtherAnnotationRows(event, a.annId, 1.0, true, a.tooltip)}
+        onMouseLeave={(event) => hoverOtherAnnotationRows(event, a.annId, 0.7, false, '')}
         onFocus={() => 0}
         onBlur={() => 0}
       />
@@ -282,8 +286,9 @@ class AnnotationRow extends React.PureComponent {
             fontSize={11}
             {...textProps}
             id={a.id}
-            onMouseOver={(event) => this.hoverOtherAnnotationRows(event, a.id, 1.0, true, name)}
-            onMouseOut={(event) => this.hoverOtherAnnotationRows(event, a.id, 0.7, false, name)}
+            uri={a.uri}
+            onMouseEnter={(event) => hoverOtherAnnotationRows(event, a.annId, 1.0, true, a.tooltip)}
+            onMouseLeave={(event) => hoverOtherAnnotationRows(event, a.annId, 0.7, false, '')}
             onFocus={() => { }}
             onBlur={() => { }}
           >

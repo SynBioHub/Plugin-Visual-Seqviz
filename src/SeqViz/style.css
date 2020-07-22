@@ -114,10 +114,18 @@
 }
 
 #linear-tooltip {
-  background: cornsilk;
+  background: rgba(0.5, 0.5, 0.5, 0.8);
   border: 1px solid black;
   border-radius: 5px;
   padding: 5px;
   position: absolute;
   display: none;
+  font-size: 10px;
+  font-weight: 300;
+  font-family: cursive;
+  width: fit-content;
+  font-family: Arial, Helvetica, sans-serif;
+  max-width: 200px;
+  line-height: 1.5em;
+  color: white;
 }
