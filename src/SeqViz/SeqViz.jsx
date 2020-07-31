@@ -11,6 +11,7 @@ import { annotationFactory } from "../utils/sequence";
 import CentralIndexContext from "./handlers/centralIndex";
 import { SelectionContext, defaultSelection } from "./handlers/selection.jsx";
 import SeqViewer from "./SeqViewer.jsx";
+import VisbolViewer from "./VisbolViewer.jsx";
 
 import "./style.css";
 
@@ -106,6 +107,7 @@ export default class SeqViz extends React.Component {
       cutSites: [],
       selection: { ...defaultSelection },
       search: [],
+      displayList: {},
       annotations: this.parseAnnotations(props.annotations, props.seq),
       part: {}
     };
@@ -143,17 +145,19 @@ export default class SeqViz extends React.Component {
 
     try {
       if (accession) {
-        const part = await externalToPart(accession, this.props);
+        const { displayList, parts } = await externalToPart(accession, this.props);
+        console.log(displayList, parts);
         this.setState({
           part: {
             ...part,
             annotations: this.parseAnnotations(part.annotations, part.seq)
-          }
+          },
+          displayList
         });
         this.search(part);
         this.cut(part);
       } else if (file) {
-        const parts = await filesToParts([file], this.props);
+        const { displayList, parts } = await filesToParts(file, this.props);
 
         this.setState({
           part: {
@@ -162,7 +166,8 @@ export default class SeqViz extends React.Component {
               parts[0].annotations,
               parts[0].seq
             )
-          }
+          },
+          displayList
         });
         this.search(parts[0]);
         this.cut(parts[0]);
@@ -252,7 +257,7 @@ export default class SeqViz extends React.Component {
   render() {
     const { style, viewer } = this.props;
     let { annotations, compSeq, name, seq } = this.props;
-    const { centralIndex, cutSites, part, search, selection } = this.state;
+    const { centralIndex, cutSites, part, search, selection, displayList } = this.state;
 
     // part is either from a file/accession, or each prop was set
     seq = seq || part.seq || "";
@@ -302,7 +307,10 @@ export default class SeqViz extends React.Component {
       <div className="la-vz-seqviz" style={style}>
         <CentralIndexContext.Provider value={centralIndex}>
           <SelectionContext.Provider value={selection}>
-            {viewers.filter(v => v).map(v => v)}
+            <VisbolViewer {...this.props} displayList={displayList} />
+            <div className="seq-viewer">
+              {viewers.filter(v => v).map(v => v)}
+            </div>
           </SelectionContext.Provider>
         </CentralIndexContext.Provider>
         <div id="linear-tooltip">

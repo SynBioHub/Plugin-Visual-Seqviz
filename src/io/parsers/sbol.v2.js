@@ -178,7 +178,20 @@ export default async (sbol, fileName, colors = []) =>
               const ranges = Location.map(location => location.Range.map(range => range));
               const rangesarr = [].concat.apply([], ranges);
 
-              rangesarr.sort((a, b) => first(a.start) - first(b.start))
+              rangesarr.sort((a, b) => first(a.start) - first(b.start));
+              if (rangesarr.length > 0) {
+                let rangestart = Infinity,
+                  rangeend = -1;
+                rangesarr.forEach((range) => {
+                  if (first(range.start) < rangestart) {
+                    rangestart = first(range.start);
+                  }
+                  if (first(range.end) > rangeend) {
+                    rangeend = first(range.end);
+                  }
+                })
+                tooltip += '<b>Range:</b> ' + rangestart + '..' + rangeend + '<br/>';
+              }
 
               rangesarr.forEach((range, i) => {
                 let loc = '';

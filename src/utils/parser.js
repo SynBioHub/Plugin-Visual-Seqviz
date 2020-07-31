@@ -59,7 +59,10 @@ const DNAComplement = {
  */
 export const dnaComplement = origSeq => {
   if (!origSeq) {
-    return { seq: "", compSeq: "" };
+    return {
+      seq: "",
+      compSeq: ""
+    };
   }
 
   // filter out unrecognized basepairs and build up the complement
@@ -71,7 +74,10 @@ export const dnaComplement = origSeq => {
       compSeq += DNAComplement[origSeq[i]];
     }
   }
-  return { seq, compSeq };
+  return {
+    seq,
+    compSeq
+  };
 };
 
 /**
@@ -81,7 +87,9 @@ export const dnaComplement = origSeq => {
  * @return {string}     the reverse complement of the input
  */
 export const reverseComplement = inputSeq => {
-  const { compSeq } = dnaComplement(inputSeq);
+  const {
+    compSeq
+  } = dnaComplement(inputSeq);
   return compSeq
     .split("")
     .reverse()

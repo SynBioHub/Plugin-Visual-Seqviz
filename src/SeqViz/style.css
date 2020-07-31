@@ -4,9 +4,6 @@
 .la-vz-seqviz {
   height: 100%;
   width: 100%;
-
-  display: flex;
-  flex-direction: row;
 }
 
 .la-vz-seqviz svg {
@@ -21,6 +18,18 @@
 
 .la-vz-seqviz svg text:selection {
   background: none;
+}
+
+.visbol-container {
+  width: 100%;
+  display: block;
+}
+
+.seq-viewer {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
 }
 
 .la-vz-viewer-container {

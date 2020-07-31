@@ -35,6 +35,7 @@
     "image-webpack-loader": "^6.0.0",
     "regenerator-runtime": "^0.13.5",
     "style-loader": "^1.2.1",
+    "terser-webpack-plugin": "^3.0.7",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
@@ -49,9 +50,13 @@
     "node-fetch": "^2.6.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-parametric-svg": "^0.1.6",
     "react-sizeme": "^2.6.12",
     "request": "^2.88.2",
+    "sboljs": "^2.2.5",
+    "sbolmeta": "^0.3.2",
     "serialize-javascript": "^3.1.0",
+    "sha1": "^1.1.1",
     "xml2js": "^0.4.23"
   }
 }

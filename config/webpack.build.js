@@ -1,5 +1,6 @@
 const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin')
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -40,7 +41,7 @@ module.exports = {
             "@babel/plugin-proposal-object-rest-spread",
             '@babel/plugin-transform-runtime',
             "babel-plugin-module-resolver",
-            "babel-plugin-transform-imports"
+            "babel-plugin-transform-imports",
           ]
         }
       },
@@ -72,7 +73,16 @@ module.exports = {
   //   new BundleAnalyzerPlugin({ defaultSizes: "stat" })
   // ],
   optimization: {
-    nodeEnv: "production",
-    minimizer: [new UglifyJsPlugin()]
-  }
+    minimize: false
+    // nodeEnv: "production",
+    //   minimizer: [
+    //     // new UglifyJsPlugin()
+    //     new TerserPlugin({
+    //       parallel: true,
+    //       terserOptions: {
+    //         ecma: 6,
+    //       },
+    //     })
+    //   ]
+  },
 };

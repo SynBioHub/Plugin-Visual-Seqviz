@@ -1,12 +1,19 @@
-import fetch, { Request } from "node-fetch";
+import fetch, {
+  Request
+} from "node-fetch";
 
 import fileToParts from "./filesToParts";
-import { fetchBBB } from "./igemBackbones";
+import {
+  fetchBBB
+} from "./igemBackbones";
 
 /**
  * retrieve a string representation of a part from a remote server and convert it into a part
  */
-export default async (accession, options = { backbone: "", colors: [] }) => {
+export default async (accession, options = {
+  backbone: "",
+  colors: []
+}) => {
   let igem = false;
 
   // get from cache
@@ -15,7 +22,9 @@ export default async (accession, options = { backbone: "", colors: [] }) => {
     return JSON.parse(localStorage.getItem(key));
   }
 
-  const { colors = [], backbone = "" } = options;
+  const {
+    colors = [], backbone = ""
+  } = options;
   // right now, we support either NCBI or iGEM. We parse this automatically. the user
   // doesn't specify the target registry, so we have to infer it from the passed accession
   let url = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=${accession.trim()}&rettype=gbwithparts&retmode=text`;
@@ -28,8 +37,12 @@ export default async (accession, options = { backbone: "", colors: [] }) => {
   }
 
   const response = await fetch(
-    new Request(url, { headers: { "X-Requested-With": "XMLHttpRequest" } })
-  )
+      new Request(url, {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest"
+        }
+      })
+    )
     .then(response => response.text())
     .catch(console.error);
 
@@ -41,15 +54,20 @@ export default async (accession, options = { backbone: "", colors: [] }) => {
 
   // convert to a part
   const igemBackbone =
-    igem && backbone.length
-      ? { name: backbone, backbone: fetchBBB(backbone) }
-      : "";
+    igem && backbone.length ? {
+      name: backbone,
+      backbone: fetchBBB(backbone)
+    } :
+    "";
 
   if (igem && igemBackbone === "") {
     console.error("iGEM BioBrick ID used, but no backbone ID specified.");
   }
 
-  const parts = await fileToParts(response, {
+  const {
+    displayList,
+    parts
+  } = await fileToParts(response, {
     colors: colors,
     backbone: igemBackbone
   });
@@ -58,7 +76,10 @@ export default async (accession, options = { backbone: "", colors: [] }) => {
     const part = parts[0];
     if (key && part && part.seq) {
       localStorage.setItem(key, JSON.stringify(part));
-      return part;
+      return {
+        displayList,
+        part
+      };
     }
   }
 
