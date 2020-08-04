@@ -21,9 +21,6 @@ function GlyphRenderer(props) {
     function hoverOtherAnnotationRows(event, className, opacity, isTooltipShown, text) {
         event.stopPropagation();
         const elements = document.getElementsByClassName(className);
-        for (let i = 0; i < elements.length; i += 1) {
-            elements[i].style.fillOpacity = opacity;
-        }
         if (isTooltipShown) {
             let view = document.getElementsByClassName('la-vz-seqviz')[0].getBoundingClientRect();
             // console.log(event.clientX, event.clientY, event.offsetX, event.offsetY, linear)
@@ -34,9 +31,17 @@ function GlyphRenderer(props) {
             tooltip.style.display = "block";
             tooltip.style.left = left + 20 + 'px';
             tooltip.style.top = top + 'px';
+            for (let i = 0; i < elements.length; i += 1) {
+                elements[i].style.fillOpacity = opacity;
+                elements[i].classList.add("hoveredannotation");
+            }
         } else {
             let tooltip = document.getElementById("linear-tooltip");
             tooltip.style.display = "none";
+            for (let i = 0; i < elements.length; i += 1) {
+                elements[i].style.fillOpacity = opacity;
+                elements[i].classList.remove("hoveredannotation");
+            }
         }
     }
 }

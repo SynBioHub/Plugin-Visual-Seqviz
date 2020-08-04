@@ -16,10 +16,18 @@ import { COLOR_BORDER_MAP, darkerColor } from "../../utils/colors";
  */
 export default class Annotations extends React.PureComponent {
   /** during an annotation hover event, darken all other pieces of the same annotation */
-  hoverAnnotation = (className, opacity) => {
+  hoverAnnotation = (className, opacity, ishovered) => {
     const elements = document.getElementsByClassName(className);
-    for (let i = 0; i < elements.length; i += 1) {
-      elements[i].style.fillOpacity = opacity;
+    if (ishovered) {
+      for (let i = 0; i < elements.length; i += 1) {
+        elements[i].style.fillOpacity = opacity;
+        elements[i].classList.add("hoveredannotation");
+      }
+    } else {
+      for (let i = 0; i < elements.length; i += 1) {
+        elements[i].style.fillOpacity = opacity;
+        elements[i].classList.remove("hoveredannotation");
+      }
     }
   };
 
@@ -165,8 +173,8 @@ const SingleAnnotation = props => {
         })}
         fill={a.color}
         stroke={COLOR_BORDER_MAP[a.color] || calcBorderColor(a.color)}
-        onMouseOver={() => hoverAnnotation(a.annId, 1.0)}
-        onMouseOut={() => hoverAnnotation(a.annId, 0.7)}
+        onMouseOver={() => hoverAnnotation(a.annId, 1.0, true)}
+        onMouseOut={() => hoverAnnotation(a.annId, 0.7, false)}
         onFocus={() => { }}
         onBlur={() => { }}
         {...annStyle}
@@ -175,8 +183,8 @@ const SingleAnnotation = props => {
         <text
           id={a.id}
           dy={-0.4 * lineHeight}
-          onMouseOver={() => hoverAnnotation(a.annId, 1.0)}
-          onMouseOut={() => hoverAnnotation(a.annId, 0.7)}
+          onMouseOver={() => hoverAnnotation(a.annId, 1.0, true)}
+          onMouseOut={() => hoverAnnotation(a.annId, 0.7, false)}
           onFocus={() => { }}
           onBlur={() => { }}
         >
