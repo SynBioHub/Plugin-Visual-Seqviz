@@ -19,7 +19,6 @@ class Glyph {
         this.strand = glyphInfo.strand;
         this.tooltip = glyphInfo.tooltip;
         this.hookedTo = glyphInfo.hookedTo;
-        this.linklength = 16;
         this.labelLocation = {
             x: 0,
             y: 0
@@ -35,6 +34,7 @@ class Glyph {
         }
         var glyph = GlyphSelector[this.type];
         if (!glyph) {
+            console.log(this.type);
             glyph = GlyphSelector['no-glyph-assigned'];
         }
         this.dimensions = glyph.dimensions;
@@ -71,7 +71,7 @@ class Glyph {
     }
 
     calibrateDisplay(display, inset) {
-        var farthestX = this.coords[0] + this.dimensions[0] + this.linklength;
+        var farthestX = this.coords[0] + this.dimensions[0];
         if (farthestX > display.width) {
             display.width = farthestX;
         }
@@ -92,7 +92,7 @@ class Glyph {
         // southern link
         switch (direction) {
             case 'north': {
-                this.coords = [tip.x - this.dimensions[0], tip.y];
+                this.coords = [tip.x - this.dimensions[0] / 2, tip.y];
                 break;
             }
             default: {
@@ -107,25 +107,25 @@ class Glyph {
             case 'north': {
                 if (this.coords[1] === 0) {
                     return {
-                        x: this.coords[0] + this.dimensions[0] + this.linklength,
+                        x: this.coords[0] + this.dimensions[0] / 2,
                         y: this.coords[1] + this.dimensions[1] - this.inset
                     };
                 }
                 return {
-                    x: this.coords[0] + this.dimensions[0] + this.linklength,
+                    x: this.coords[0] + this.dimensions[0] / 2,
                     y: this.coords[1] + this.dimensions[1]
                 };
             }
             case 'east': {
                 return {
-                    x: this.coords[0] + this.dimensions[0] + this.linklength,
-                    y: this.coords[1] + this.dimensions[1]
+                    x: this.coords[0] + this.dimensions[0],
+                    y: this.coords[1] + this.dimensions[1] / 2
                 };
             }
             case 'link':
             default: {
                 return {
-                    x: this.coords[0] + this.dimensions[0] + this.linklength,
+                    x: this.coords[0] + this.dimensions[0],
                     y: this.coords[1]
                 };
             }

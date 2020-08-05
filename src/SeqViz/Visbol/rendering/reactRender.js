@@ -8,6 +8,7 @@ import HookRenderer from './HookRenderer';
 function Rendering(props) {
     const display = props.display;
     // const [size, setSize] = useState(1);
+    console.log(display);
     const backboneY = (display.height - display.largestInset);
     const rendering = getRendering(display, backboneY);
     const safety = 10;

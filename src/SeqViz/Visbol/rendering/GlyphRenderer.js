@@ -12,7 +12,8 @@ function GlyphRenderer(props) {
         <g
             onMouseEnter={(event) => hoverOtherAnnotationRows(event, props.id, 1.0, true, props.tooltip)}
             onMouseLeave={(event) => hoverOtherAnnotationRows(event, props.id, 0.7, false, '')}
-            data-uri={props.uri}>
+        // data-uri={props.uri}
+        >
             <Label name={props.name} x={props.labelLocation.x} y={props.backboneY - props.labelLocation.y} />
             <ParametricSVG svgString={props.defaultString} innerOnly={true} params={{ baseline_x: baseline_x, baseline_y: baseline_y }} />
         </g>

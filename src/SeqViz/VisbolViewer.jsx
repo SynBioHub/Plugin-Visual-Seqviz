@@ -36,7 +36,9 @@ export default class VisbolViewer extends React.Component {
     const { display } = this.state;
     if (display) {
       console.log('renderGlyph');
+      console.log(display);
       display.renderGlyphs();
+      console.log(display)
       console.log('start rendering');
       return <Rendering display={display} />
     }
