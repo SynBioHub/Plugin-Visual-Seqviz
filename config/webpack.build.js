@@ -73,16 +73,16 @@ module.exports = {
   //   new BundleAnalyzerPlugin({ defaultSizes: "stat" })
   // ],
   optimization: {
-    minimize: false
-    // nodeEnv: "production",
-    //   minimizer: [
-    //     // new UglifyJsPlugin()
-    //     new TerserPlugin({
-    //       parallel: true,
-    //       terserOptions: {
-    //         ecma: 6,
-    //       },
-    //     })
-    //   ]
+    minimize: true,
+    nodeEnv: "production",
+    minimizer: [
+      // new UglifyJsPlugin()
+      new TerserPlugin({
+        parallel: true,
+        terserOptions: {
+          ecma: 6,
+        },
+      })
+    ]
   },
 };

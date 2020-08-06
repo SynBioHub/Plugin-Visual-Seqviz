@@ -14,9 +14,7 @@ function getDisplayList(componentDefinition, config, share, max) {
         var segments = [
             getDisplayListSegment(componentDefinition, config, share)
         ]
-        console.log(segments);
         segments = recurseGetDisplayList(componentDefinition, segments, config, share, max)
-        console.log(segments);
     } else {
         var segments = []
     }
@@ -115,7 +113,6 @@ function getDisplayListSegment(componentDefinition, config, share, i) {
         var name = componentDefinition.name != '' ? componentDefinition.name : componentDefinition.displayId
         var roles = componentDefinition.roles
         var uri = componentDefinition.uri.toString();
-        console.log(uri);
 
         if (config && uri.startsWith(config.get('databasePrefix'))) {
             if (uri.startsWith(config.get('databasePrefix') + 'user/') && share) {

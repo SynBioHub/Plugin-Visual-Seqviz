@@ -5,6 +5,7 @@ import { calcGC, calcTm } from "../../utils/sequence";
 /** Initial/default selection */
 export const defaultSelection = {
   ref: null,
+  annref: null,
   name: "",
   seq: "",
   gc: 0,
@@ -114,7 +115,7 @@ const withSelectionHandler = WrappedComp =>
       const knownRange = this.dragEvent
         ? this.idToRange.get(e.currentTarget.id) // only look for SeqBlocks
         : this.idToRange.get(e.target.id) || // elements and SeqBlocks
-          this.idToRange.get(e.currentTarget.id);
+        this.idToRange.get(e.currentTarget.id);
       if (!knownRange) {
         return; // there isn't a known range with the id of the element
       }
@@ -195,7 +196,7 @@ const withSelectionHandler = WrappedComp =>
      */
     circularSeqEvent = e => {
       const { seq, selection } = this.props;
-      let { start, end, clockwise, currRef } = selection;
+      let { start, end, clockwise, currRef, annref } = selection;
 
       let currBase = this.calculateBaseCircular(e);
       let ref = currRef;
@@ -307,6 +308,7 @@ const withSelectionHandler = WrappedComp =>
           start: start,
           end: end,
           ref: ref,
+          annref: annref,
           clockwise: clockwise
         });
       }
@@ -387,7 +389,7 @@ const withSelectionHandler = WrappedComp =>
         return;
       }
 
-      const { clockwise, start, end, ref, type, element } = {
+      const { clockwise, start, end, ref, type, annref, element } = {
         ...this.props.selection,
         ...newSelection
       };
@@ -399,6 +401,7 @@ const withSelectionHandler = WrappedComp =>
 
       const selection = {
         ref,
+        annref,
         seq,
         gc,
         tm,

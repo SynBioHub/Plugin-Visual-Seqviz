@@ -146,7 +146,6 @@ export default class SeqViz extends React.Component {
     try {
       if (accession) {
         const { displayList, parts } = await externalToPart(accession, this.props);
-        console.log(displayList, parts);
         this.setState({
           part: {
             ...part,
@@ -307,7 +306,7 @@ export default class SeqViz extends React.Component {
       <div className="la-vz-seqviz" style={style}>
         <CentralIndexContext.Provider value={centralIndex}>
           <SelectionContext.Provider value={selection}>
-            <VisbolViewer {...this.props} displayList={displayList} />
+            <VisbolViewer displayList={displayList} selection={selection} />
             <div className="seq-viewer">
               {viewers.filter(v => v).map(v => v)}
             </div>

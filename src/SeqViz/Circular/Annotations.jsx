@@ -166,6 +166,7 @@ const SingleAnnotation = props => {
         className={a.annId}
         ref={inputRef(a.id, {
           ref: a.id,
+          annref: a.annId,
           start: a.start,
           end: a.end,
           type: "ANNOTATION",

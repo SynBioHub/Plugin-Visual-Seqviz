@@ -7,7 +7,6 @@ var Segment = require('./segment'),
   Colors = require('./colorLibrary/color')
 
 let helper = {};
-console.log(Segment);
 /*
  * this is a helper method which returns true if the segment is a participant in an interaction
  */

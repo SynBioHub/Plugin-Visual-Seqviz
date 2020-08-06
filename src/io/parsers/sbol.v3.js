@@ -77,6 +77,7 @@ export default async (source, fileName, colors = []) =>
 
         const displayList = {
           version: 1,
+          name: sbol.componentDefinitions[0].name || sbol.componentDefinitions[0].displayId,
           components: [{
             segments
           }],
@@ -146,17 +147,16 @@ function recurseGetDisplayList(componentDefinition, segments, config, share, max
     if (component.definition && !(component.definition instanceof URI) &&
       component.definition.uri) {
       if (component.definition.components.length === 0) return segments
-      var {
+      let {
         partList,
         segment
-      } = getDisplayListSegment(component.definition, config, share)
+      } = getDisplayListSegment(component.definition, config, share);
 
-      if (segment.sequence.length > 0) {
+      if (segment[0].sequence.length > 0) {
         if (segments.filter(function (e) {
-            return e.name == segment.name;
+            return e.name == segment[0].name;
           }).length == 0) {
-          segments.push(segment)
-
+          segments.push(segment[0]);
         }
       }
 
@@ -420,6 +420,7 @@ function getDisplayListSegment(componentDefinition, config, share, i) {
       }
 
       let annotationRanges = sequenceAnnotation.ranges;
+
       annotationRanges.sort((a, b) => {
         if (a.start === b.start) {
           return a.end - b.end;
@@ -510,6 +511,7 @@ function getDisplayListSegment(componentDefinition, config, share, i) {
     })
     // try and find sequence data
     var partSeq = componentDefinition.sequences;
+    console.log(partSeq);
 
     if (partSeq && partSeq.length > 0) {
       partSeq = partSeq[0];
@@ -536,8 +538,6 @@ function getDisplayListSegment(componentDefinition, config, share, i) {
     sequence,
     topologies
   }];
-
-  console.log(segment);
 
   return {
     partList,

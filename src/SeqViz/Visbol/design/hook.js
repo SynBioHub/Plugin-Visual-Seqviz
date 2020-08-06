@@ -63,7 +63,7 @@ class Hook {
         switch (this.direction) {
             case 'link': {
                 return {
-                    x: this.start.x + 8,
+                    x: this.start.x + 25,
                     y: this.start.y
                 };
             }

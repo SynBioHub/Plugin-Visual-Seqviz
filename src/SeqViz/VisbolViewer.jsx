@@ -19,14 +19,13 @@ export default class VisbolViewer extends React.Component {
   }
 
   componentDidUpdate = ({ displayList }) => {
-    if (displayList !== this.props.displayList) {
+    if (displayList.name !== this.props.displayList.name) {
       this.setList();
     }
   }
 
   setList = () => {
     const { displayList } = this.props;
-    console.log(displayList);
     this.setState({
       display: prepareDisplay(displayList)
     })
@@ -34,13 +33,9 @@ export default class VisbolViewer extends React.Component {
 
   render() {
     const { display } = this.state;
+    const { selection } = this.props;
     if (display) {
-      console.log('renderGlyph');
-      console.log(display);
-      display.renderGlyphs();
-      console.log(display)
-      console.log('start rendering');
-      return <Rendering display={display} />
+      return <Rendering display={display} selection={selection} />
     }
     else {
       return (<div></div>);

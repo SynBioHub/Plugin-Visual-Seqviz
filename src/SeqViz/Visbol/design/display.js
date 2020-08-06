@@ -51,22 +51,6 @@ class Display {
         }
         //would need to hook glyph to appropriate glyphs
     }
+}
 
-    renderReact() {
-        this.renderGlyphs();
-        const container = document.getElementById('design');
-        ReactDOM.render( < Rendering display = {
-                this
-            }
-            />, container);
-        }
-
-        getReactComponent() {
-            return <Rendering display = {
-                this
-            }
-            />;
-        }
-    }
-
-    export default Display;
+export default Display;

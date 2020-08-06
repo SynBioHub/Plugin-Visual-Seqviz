@@ -17,7 +17,9 @@ function prepareDisplay(displayInfo, forwards = true) {
     extractedInfo.hookList.forEach(hookInfo => {
         glyphDictionary[hookInfo.startGlyph].hookTo(glyphDictionary[hookInfo.destinationGlyph], hookInfo.direction, hookInfo.type);
     })
-    return new Display(glyphDictionary, extractedInfo.rootGlyphs, 0);
+    let display = new Display(glyphDictionary, extractedInfo.rootGlyphs, 0);
+    display.renderGlyphs();
+    return display;
 }
 
 export default prepareDisplay;

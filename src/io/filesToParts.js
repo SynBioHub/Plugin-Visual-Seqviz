@@ -39,8 +39,6 @@ export default async (
       }
     });
 
-    console.log('hi', partLists);
-
     return {
       'displayList': partLists.displayList,
       'parts': partLists.partLists.reduce((acc, partList) => acc.concat(partList), [])
@@ -118,8 +116,6 @@ const fileToParts = async (
     console.error(e);
     return null;
   }
-
-  console.log('new', parts);
 
   // add the source information to all parts
   if (parts) {

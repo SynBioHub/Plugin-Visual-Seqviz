@@ -228,7 +228,11 @@ const withEventRouter = WrappedComp =>
     };
 
     handleDoubleClick = (target) => {
+      console.log('dbclick', target.tagName);
       const uri = target.getAttribute('uri');
+      // if (target.tagName === 'svg') {
+      //   uri = target.parentNode.getAttribute('uri');
+      // }
       if (uri) {
         window.location.assign(uri);
       }
@@ -317,14 +321,14 @@ const withEventRouter = WrappedComp =>
         setCentralIndex,
         ...rest
       } = this.props;
-      const { Circular, name } = this.props;
+      // const { Circular, name } = this.props;
 
-      const type = Circular ? "circular" : "linear";
-      const id = `la-vz-${type}-${name.replace(/\s/g, "")}-event-router`;
+      // const type = Circular ? "circular" : "linear";
+      // const id = `la-vz-${type}-${name.replace(/\s/g, "")}-event-router`;
 
       return (
         <div
-          id={id}
+          // id={id}
           className="la-vz-viewer-event-router"
           onKeyDown={this.handleKeyPress}
           onMouseMove={mouseEvent}
