@@ -16,6 +16,8 @@
 
 .hoveredannotation {
   stroke: black !important;
+  stroke-width: 2px !important;
+  paint-order: stroke;
 }
 
 .la-vz-seqviz svg text {

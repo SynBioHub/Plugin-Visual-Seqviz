@@ -3,20 +3,27 @@ import { ParametricSVG } from 'react-parametric-svg';
 import Label from './labelCreator';
 
 function GlyphRenderer(props) {
-    var baseline_y = props.backboneY - props.coords[1];
-    var baseline_x = props.coords[0];
-    if (props.coords[1] !== 0) { //glyph isn't on baseline
-        baseline_y -= props.inset;
+    const { backboneY, inputRef, item } = props;
+    var baseline_y = backboneY - item.coords[1];
+    var baseline_x = item.coords[0];
+    if (item.coords[1] !== 0) { //glyph isn't on baseline
+        baseline_y -= item.inset;
     }
     return (
         <g
-            onMouseEnter={(event) => hoverOtherAnnotationRows(event, props.id, 1.0, true, props.tooltip)}
-            onMouseLeave={(event) => hoverOtherAnnotationRows(event, props.id, 0.7, false, '')}
-            uri={props.uri}
-        // data-uri={props.uri}
+            onMouseEnter={(event) => hoverOtherAnnotationRows(event, item.id, 1.0, true, item.tooltip)}
+            onMouseLeave={(event) => hoverOtherAnnotationRows(event, item.id, 0.7, false, '')}
+            uri={item.uri}
+            id={item.id}
+            ref={inputRef(item.id, {
+                ref: item.id,
+                annref: item.id,
+                type: "ANNOTATION",
+                ranges: item.ranges
+            })}
         >
-            <Label name={props.name} x={props.labelLocation.x} y={props.backboneY - props.labelLocation.y} />
-            <ParametricSVG svgString={props.defaultString} innerOnly={true} params={{ baseline_x: baseline_x, baseline_y: baseline_y }} uri={props.uri} />
+            <Label name={item.name} x={item.labelLocation.x} y={backboneY - item.labelLocation.y} />
+            <ParametricSVG svgString={item.defaultString} innerOnly={true} params={{ baseline_x: baseline_x, baseline_y: baseline_y }} uri={item.uri} />
         </g>
     );
 
@@ -32,7 +39,7 @@ function GlyphRenderer(props) {
             tooltip.innerHTML = text;
             tooltip.style.display = "block";
             tooltip.style.left = left + 20 + 'px';
-            tooltip.style.top = top + 'px';
+            tooltip.style.top = top + 10 + 'px';
             for (let i = 0; i < elements.length; i += 1) {
                 elements[i].style.fillOpacity = opacity;
                 elements[i].classList.add("hoveredannotation");

@@ -105,48 +105,72 @@ const withSelectionHandler = WrappedComp =>
      * @param {React.SyntheticEvent} e  		the mouseEvent
      */
     mouseEvent = e => {
-      const { Circular, Linear } = this.props;
+      const { Circular, Linear, Visbol } = this.props;
 
       // should not be updating selection since it's not a drag event time
       if ((e.type === "mousemove" || e.type === "mouseup") && !this.dragEvent) {
         return;
       }
 
-      const knownRange = this.dragEvent
-        ? this.idToRange.get(e.currentTarget.id) // only look for SeqBlocks
-        : this.idToRange.get(e.target.id) || // elements and SeqBlocks
-        this.idToRange.get(e.currentTarget.id);
+      var knownRange;
+      if (Visbol) {
+        knownRange = this.idToRange.get(e.target.parentNode.id);
+      } else {
+        knownRange = this.dragEvent
+          ? this.idToRange.get(e.currentTarget.id) // only look for SeqBlocks
+          : this.idToRange.get(e.target.id) || // elements and SeqBlocks
+          this.idToRange.get(e.currentTarget.id);
+      }
       if (!knownRange) {
         return; // there isn't a known range with the id of the element
       }
 
-      const { start, end, direction, element } = knownRange;
       switch (knownRange.type) {
         case "ANNOTATION":
         case "PRIMER":
         case "FIND":
         case "TRANSLATION":
         case "ENZYME": {
-          if (!Linear) {
-            // if an element was clicked on the circular viewer, scroll the linear
-            // viewer so the element starts on the first SeqBlock
+          if (Visbol) {
+            let { ranges, ref, annref, type } = knownRange;
+            let start = Math.min.apply(null, ranges.reduce(function (p, c) {
+              return p.concat(c);
+            }));
             this.props.setCentralIndex("linear", start);
+            let selections = ranges.map((range) => {
+              return {
+                start: range[0] - 1,
+                end: range[1],
+                ref: ref,
+                annref: annref,
+                type: type,
+              }
+            })
+            this.setSelection(selections);
+            this.dragEvent = false;
+          } else {
+            const { start, end, direction, element } = knownRange;
+            if (!Linear) {
+              // if an element was clicked on the circular viewer, scroll the linear
+              // viewer so the element starts on the first SeqBlock
+              this.props.setCentralIndex("linear", start);
+            }
+
+            // Annotation or find selection range
+            const clockwise = direction ? direction === 1 : true;
+            const selectionStart = clockwise ? start : end;
+            const selectionEnd = clockwise ? end : start;
+
+            this.setSelection([{
+              ...element,
+              ...knownRange,
+              start: selectionStart,
+              end: selectionEnd,
+              clockwise: clockwise
+            }]);
+
+            this.dragEvent = false;
           }
-
-          // Annotation or find selection range
-          const clockwise = direction ? direction === 1 : true;
-          const selectionStart = clockwise ? start : end;
-          const selectionEnd = clockwise ? end : start;
-
-          this.setSelection({
-            ...element,
-            ...knownRange,
-            start: selectionStart,
-            end: selectionEnd,
-            clockwise: clockwise
-          });
-
-          this.dragEvent = false;
           break;
         }
         case "SEQ": {
@@ -165,7 +189,8 @@ const withSelectionHandler = WrappedComp =>
      * Handle a sequence selection on a linear viewer
      */
     linearSeqEvent = (e, knownRange) => {
-      const { selection } = this.props;
+      let { selection } = this.props;
+      selection = selection[0];
 
       const currBase = this.calculateBaseLinear(e, knownRange);
       const clockwiseDrag =
@@ -173,21 +198,21 @@ const withSelectionHandler = WrappedComp =>
 
       if (e.type === "mousedown" && currBase !== null) {
         // this is the start of a drag event
-        this.setSelection({
+        this.setSelection([{
           ...defaultSelection, // clears other meta
           start: e.shiftKey ? selection.start : currBase,
           end: currBase,
           clockwise: clockwiseDrag
-        });
+        }]);
         this.dragEvent = true;
       } else if (this.dragEvent && currBase !== null) {
         // continue a drag event that's currently happening
-        this.setSelection({
+        this.setSelection([{
           ...defaultSelection, // clears other meta
           start: selection.start,
           end: currBase,
           clockwise: clockwiseDrag
-        });
+        }]);
       }
     };
 
@@ -195,8 +220,11 @@ const withSelectionHandler = WrappedComp =>
      * Handle a sequence selection event on the circular viewer
      */
     circularSeqEvent = e => {
-      const { seq, selection } = this.props;
-      let { start, end, clockwise, currRef, annref } = selection;
+      let { seq, selection } = this.props;
+      let { start, end, clockwise, currRef, annref } = selection[0];
+
+      // make selected selection shown on sequence view 
+      this.props.setCentralIndex("linear", start);
 
       let currBase = this.calculateBaseCircular(e);
       let ref = currRef;
@@ -210,13 +238,13 @@ const withSelectionHandler = WrappedComp =>
         this.selectionStarted = lookahead > 0; // update check for whether there is a prior selection
         this.resetCircleDragVars(selStart); // begin drag event
 
-        this.setSelection({
+        this.setSelection([{
           ...defaultSelection,
           start: selStart,
           end: currBase,
           ref: "",
           clockwise: clockwise
-        });
+        }]);
       } else if (
         e.type === "mousemove" &&
         this.dragEvent &&
@@ -303,14 +331,14 @@ const withSelectionHandler = WrappedComp =>
         }
         this.shiftSelection = false;
 
-        this.setSelection({
+        this.setSelection([{
           ...defaultSelection,
           start: start,
           end: end,
           ref: ref,
           annref: annref,
           clockwise: clockwise
-        });
+        }]);
       }
     };
 
@@ -381,39 +409,43 @@ const withSelectionHandler = WrappedComp =>
     setSelection = newSelection => {
       const { setSelection } = this.props;
 
-      if (
-        newSelection.start === this.props.selection.start &&
-        newSelection.end === this.props.selection.end &&
-        newSelection.ref === this.props.selection.ref
-      ) {
-        return;
-      }
+      // if (
+      //   newSelection.start === this.props.selection.start &&
+      //   newSelection.end === this.props.selection.end &&
+      //   newSelection.ref === this.props.selection.ref
+      // ) {
+      //   return;
+      // }
 
-      const { clockwise, start, end, ref, type, annref, element } = {
-        ...this.props.selection,
-        ...newSelection
-      };
+      let selections = [];
 
-      const length = this.calcSelectionLength(start, end, clockwise);
-      const seq = this.getSelectedSequence(start, end, clockwise);
-      const gc = calcGC(seq);
-      const tm = calcTm(seq);
+      newSelection.forEach((selection) => {
+        const { clockwise, start, end, ref, type, annref, element } = {
+          ...this.props.selection[0],
+          ...selection
+        };
 
-      const selection = {
-        ref,
-        annref,
-        seq,
-        gc,
-        tm,
-        type,
-        start,
-        end,
-        length,
-        clockwise,
-        element
-      };
+        const length = this.calcSelectionLength(start, end, clockwise);
+        const seq = this.getSelectedSequence(start, end, clockwise);
+        const gc = calcGC(seq);
+        const tm = calcTm(seq);
 
-      setSelection(selection);
+        selections.push({
+          ref,
+          annref,
+          seq,
+          gc,
+          tm,
+          type,
+          start,
+          end,
+          length,
+          clockwise,
+          element
+        });
+      })
+
+      setSelection(selections);
     };
 
     /**

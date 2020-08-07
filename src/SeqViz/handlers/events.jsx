@@ -112,9 +112,9 @@ const withEventRouter = WrappedComp =>
         case "ShiftArrowDown":
         case "ShiftArrowLeft": {
           const { selection, setSelection } = this.props;
-          const { start, end } = selection;
+          const { start, end } = selection[0];
           if (Linear) {
-            let { clockwise } = selection;
+            let { clockwise } = selection[0];
             let newPos = end;
             if (type === "ArrowUp" || type === "ShiftArrowUp") {
               // if there are multiple blocks or just one. If one, just inc by one
@@ -151,19 +151,19 @@ const withEventRouter = WrappedComp =>
                 type === "ShiftArrowDown"
                 : clockwise;
             if (newPos !== start && !type.startsWith("Shift")) {
-              setSelection({
+              setSelection([{
                 start: newPos,
                 end: newPos,
                 clockwise: true,
                 ref: ""
-              });
+              }]);
             } else if (type.startsWith("Shift")) {
-              setSelection({
+              setSelection([{
                 start: start,
                 end: newPos,
                 clockwise: clockwise,
                 ref: ""
-              });
+              }]);
             }
             break;
           }
@@ -181,7 +181,7 @@ const withEventRouter = WrappedComp =>
     handleCopy = () => {
       const {
         seq,
-        selection: { start, end, ref }
+        selection: [{ start, end, ref }]
       } = this.props;
 
       const formerFocus = document.activeElement;
@@ -206,29 +206,30 @@ const withEventRouter = WrappedComp =>
      * select all of the sequence
      */
     selectAllHotkey = () => {
+      console.log('set');
       const {
         setSelection,
         selection,
-        selection: { start }
+        selection: [{ start }]
       } = this.props;
 
-      const newSelection = {
-        ...selection,
+      const newSelection = [{
+        ...selection[0],
         start: start,
         end: start,
         clockwise: true,
         ref: "ALL" // ref to all means select the whole thing
-      };
+      }];
 
       setSelection(newSelection);
     };
 
     handleTripleClick = () => {
+      console.log('here');
       this.selectAllHotkey();
     };
 
     handleDoubleClick = (target) => {
-      console.log('dbclick', target.tagName);
       const uri = target.getAttribute('uri');
       // if (target.tagName === 'svg') {
       //   uri = target.parentNode.getAttribute('uri');
@@ -289,9 +290,9 @@ const withEventRouter = WrappedComp =>
      * current central index
      */
     handleScrollEvent = e => {
-      const { Linear, seq } = this.props;
+      const { Circular, seq } = this.props;
 
-      if (!Linear) {
+      if (Circular) {
         // a "large scroll" (1000) should rotate through 20% of the plasmid
         let delta = seq.length * (e.deltaY / 5000);
         delta = Math.floor(delta);
@@ -321,14 +322,14 @@ const withEventRouter = WrappedComp =>
         setCentralIndex,
         ...rest
       } = this.props;
-      // const { Circular, name } = this.props;
+      const { Circular, Linear, name } = this.props;
 
-      // const type = Circular ? "circular" : "linear";
-      // const id = `la-vz-${type}-${name.replace(/\s/g, "")}-event-router`;
+      const type = Circular ? "circular" : (Linear ? "linear" : "visbol");
+      const id = `la-vz-${type}-${name.replace(/\s/g, "")}-event-router`;
 
       return (
         <div
-          // id={id}
+          id={id}
           className="la-vz-viewer-event-router"
           onKeyDown={this.handleKeyPress}
           onMouseMove={mouseEvent}

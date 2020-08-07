@@ -33,9 +33,9 @@ export default class VisbolViewer extends React.Component {
 
   render() {
     const { display } = this.state;
-    const { selection } = this.props;
+    const { selection, setSelection, Visbol, seq, name } = this.props;
     if (display) {
-      return <Rendering display={display} selection={selection} />
+      return <Rendering display={display} selection={selection} setSelection={setSelection} Visbol={Visbol} name={name} seq={seq} />
     }
     else {
       return (<div></div>);

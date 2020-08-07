@@ -4,7 +4,7 @@ import { SelectionContext } from "../../handlers/selection.jsx";
 export default class VisbolSelection extends React.Component {
   static contextType = SelectionContext;
   render() {
-    let { annref } = this.context;
+    let { annref } = this.context[0];
     let { components } = this.props;
 
     const selectStyle = {
@@ -24,7 +24,7 @@ export default class VisbolSelection extends React.Component {
       let selection = components.find(com => com.id === annref);
       let height = selection.dimensions[1] * 2;
       let width = selection.dimensions[0] * 1.5;
-      let xstart = selection.coords[0];
+      let xstart = selection.coords[0] - 2;
       let ystart = selection.coords[1] - selection.dimensions[1];
       return (
         <g id="la-vz-visbol-selection">
