@@ -152,6 +152,7 @@ See: https://github.com/Lattice-Automation/seqviz#optionsstyle-`);
               {...this.props}
               {...this.state}
               {...this.linearProps()}
+              copyEvent={event => event.key === "c" && (event.metaKey || event.ctrlKey)}
               seqLength={seq.length}
               cutSites={cutSites}
             />

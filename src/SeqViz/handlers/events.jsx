@@ -2,7 +2,7 @@ import * as React from "react";
 
 import debounce from "../../utils/debounce";
 import CentralIndexContext from "./centralIndex";
-import { renderToStaticNodeStream } from 'react-dom/server';
+
 
 /**
  * an HOC used one level above the Sequence viewer. It handles the routing of all
@@ -63,7 +63,7 @@ const withEventRouter = WrappedComp =>
     keypressMap = e => {
       const { copyEvent } = this.props;
 
-      if (copyEvent(e)) {
+      if (copyEvent && copyEvent(e)) {
         return "Copy";
       }
 
@@ -181,19 +181,23 @@ const withEventRouter = WrappedComp =>
     handleCopy = () => {
       const {
         seq,
-        selection: [{ start, end, ref }]
+        selection
       } = this.props;
 
       const formerFocus = document.activeElement;
       const tempNode = document.createElement("textarea");
-      if (ref === "ALL") {
-        tempNode.innerText = seq;
-      } else {
-        tempNode.innerText = seq.substring(start, end);
-      }
+      tempNode.innerText = '';
+      selection.forEach((selec) => {
+        if (selec.ref === "ALL") {
+          tempNode.innerText = seq;
+        } else {
+          tempNode.innerText += seq.substring(selec.start, selec.end) + "\n";
+        }
+      })
       if (document.body) {
         document.body.appendChild(tempNode);
       }
+      tempNode.style.whiteSpace = "pre-wrap";
       tempNode.select();
       document.execCommand("copy");
       tempNode.remove();
@@ -206,7 +210,6 @@ const withEventRouter = WrappedComp =>
      * select all of the sequence
      */
     selectAllHotkey = () => {
-      console.log('set');
       const {
         setSelection,
         selection,

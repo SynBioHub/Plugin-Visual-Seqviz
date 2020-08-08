@@ -380,6 +380,7 @@ function renderSegment(design, segment, interactions, interaction) {
      *Add backbone only if the glyph is non-DNA and its in sequence of length 1
      *whenever we need to hide the backBone we should set isNonDNA to true
      */
+    console.log(segment, isNonDNA);
     if (!isNonDNA) {
         if (segment.topologies.includes("circular")) {
 

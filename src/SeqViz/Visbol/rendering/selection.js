@@ -23,8 +23,8 @@ export default class VisbolSelection extends React.Component {
     if (annref) {
       let selection = components.find(com => com.id === annref);
       let height = selection.dimensions[1] * 2;
-      let width = selection.dimensions[0] * 1.5;
-      let xstart = selection.coords[0] - 2;
+      let width = selection.dimensions[0] * 1.6;
+      let xstart = selection.coords[0] - width * 0.1;
       let ystart = selection.coords[1] - selection.dimensions[1];
       return (
         <g id="la-vz-visbol-selection">
