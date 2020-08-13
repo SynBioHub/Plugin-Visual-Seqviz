@@ -191,7 +191,7 @@ const withEventRouter = WrappedComp =>
         if (selec.ref === "ALL") {
           tempNode.innerText = seq;
         } else {
-          tempNode.innerText += seq.substring(selec.start, selec.end) + "\n";
+          tempNode.innerText += seq.substring(selec.start, selec.end) + " \n";
         }
       })
       if (document.body) {
