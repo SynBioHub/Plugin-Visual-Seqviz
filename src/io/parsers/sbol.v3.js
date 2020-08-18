@@ -42,25 +42,20 @@ export default async (source, fileName, colors = []) =>
       reject(new Error(`Failed on SBOLv2 file: ${errType}`));
 
     // weird edge case with directed quotation characters
-    const fileString = source.replace(/“|”/g, '"');
-
-    // weird edge case with directed quotation characters
     SBOLDocument.loadRDF(source, function (err, sbol) {
       if (err) {
         rejectSBOL(err);
       } else {
-        console.log(sbol);
         // it's a collection of DnaComponents, parse each to a part
         var partLists = [];
         var segments = [];
         sbol.componentDefinitions.forEach(function (componentDefinition) {
           if (componentDefinition && !(componentDefinition instanceof URI) && componentDefinition.uri) {
-            console.log(componentDefinition);
             var {
               partList,
               segment
             } = getDisplayListSegment(componentDefinition);
-            segment = recurseGetDisplayList(componentDefinition, segment);
+            // segment = recurseGetDisplayList(componentDefinition, segment);
             partLists = partLists.concat(partList);
             segments = segments.concat(segment);
           }
@@ -84,7 +79,11 @@ export default async (source, fileName, colors = []) =>
           interactions,
         }
 
-        console.log(displayList);
+        var partLists = partLists.filter(part => part.segmentId === sbol.componentDefinitions[0].uri.toString());
+
+        if (partLists.length === 0) {
+          rejectSBOL(err);
+        }
 
         resolve({
           displayList,
@@ -509,27 +508,6 @@ function getDisplayListSegment(componentDefinition, config, share, i) {
       }
       return a.start - b.start;
     })
-    // try and find sequence data
-    var partSeq = componentDefinition.sequences;
-    console.log(partSeq);
-
-    if (partSeq && partSeq.length > 0) {
-      partSeq = partSeq[0];
-      if (partSeq.elements) {
-        var {
-          seq,
-          compSeq
-        } = dnaComplement(partSeq.elements);
-        partList.push({
-          ...partFactory(),
-          name,
-          note,
-          seq,
-          compSeq,
-          annotations,
-        });
-      }
-    }
   }
 
   let segment = [{
@@ -538,6 +516,28 @@ function getDisplayListSegment(componentDefinition, config, share, i) {
     sequence,
     topologies
   }];
+
+  // try and find sequence data
+  var partSeq = componentDefinition.sequences;
+
+  if (partSeq && partSeq.length > 0) {
+    partSeq = partSeq[0];
+    if (partSeq.elements) {
+      var {
+        seq,
+        compSeq
+      } = dnaComplement(partSeq.elements);
+      partList.push({
+        ...partFactory(),
+        name,
+        note,
+        seq,
+        compSeq,
+        segmentId,
+        annotations,
+      });
+    }
+  }
 
   return {
     partList,

@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import { SelectionContext } from "../handlers/selection.jsx";
-import { length } from 'file-loader';
 
 /**
  * renders the selection range of the plasmid viewer

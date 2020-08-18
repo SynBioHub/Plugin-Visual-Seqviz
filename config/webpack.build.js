@@ -1,10 +1,9 @@
 const path = require('path');
-const TerserPlugin = require('terser-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin');
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: {
-    // vendor: ["@babel/polyfill", "react","react-dom"],
     seqviz: path.join(__dirname, "..", "src", "app.js"),
   },
   output: {
@@ -73,16 +72,16 @@ module.exports = {
   //   new BundleAnalyzerPlugin({ defaultSizes: "stat" })
   // ],
   optimization: {
-    minimize: false,
-    // nodeEnv: "production",
-    // minimizer: [
-    //   // new UglifyJsPlugin()
-    //   new TerserPlugin({
-    //     parallel: true,
-    //     terserOptions: {
-    //       ecma: 6,
-    //     },
-    //   })
-    // ]
+    minimize: true,
+    nodeEnv: "production",
+    minimizer: [
+      // new UglifyJsPlugin()
+      new TerserPlugin({
+        parallel: true,
+        terserOptions: {
+          mangle: true
+        },
+      })
+    ]
   },
 };

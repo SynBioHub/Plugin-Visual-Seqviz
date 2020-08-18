@@ -1,9 +1,6 @@
 import * as React from "react";
 
 import prepareDisplay from './Visbol/design/prepareDisplay';
-const SBOLDocument = require('sboljs');
-import { getDisplayList } from './Visbol/gatherInfo/originalVisbol/getDisplayList';
-import getInteractionList from './Visbol/gatherInfo/originalVisbol/getInteractionList';
 import Rendering from './Visbol/rendering/reactRender';
 
 export default class VisbolViewer extends React.Component {

@@ -1,7 +1,6 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 
-import externalToPart from "../io/externalToPart";
 import filesToParts from "../io/filesToParts";
 import { cutSitesInRows } from "../utils/digest";
 import isEqual from "../utils/isEqual";
@@ -21,7 +20,6 @@ import "./style.css";
  */
 export default class SeqViz extends React.Component {
   static propTypes = {
-    accession: PropTypes.string,
     annotations: PropTypes.arrayOf(
       PropTypes.shape({
         start: PropTypes.number.isRequired,
@@ -71,7 +69,6 @@ export default class SeqViz extends React.Component {
       height: 500,
       width: 1000,
     },
-    accession: "",
     annotations: [],
     backbone: "",
     bpColors: {},
@@ -98,6 +95,7 @@ export default class SeqViz extends React.Component {
     super(props);
 
     this.state = {
+      isRender: true,
       accession: "",
       centralIndex: {
         circular: 0,
@@ -141,36 +139,30 @@ export default class SeqViz extends React.Component {
    * Set the part from a file or an accession ID
    */
   setPart = async () => {
-    const { accession, file } = this.props;
+    const { file } = this.props;
 
     try {
-      if (accession) {
-        const { displayList, parts } = await externalToPart(accession, this.props);
-        this.setState({
-          part: {
-            ...part,
-            annotations: this.parseAnnotations(part.annotations, part.seq)
-          },
-          displayList
-        });
-        this.search(part);
-        this.cut(part);
-      } else if (file) {
-        const { displayList, parts } = await filesToParts(file, this.props);
+      const { displayList, parts, isRender } = await filesToParts(file, this.props);
 
+      if (!isRender) {
         this.setState({
-          part: {
-            ...parts[0],
-            annotations: this.parseAnnotations(
-              parts[0].annotations,
-              parts[0].seq
-            )
-          },
-          displayList
-        });
-        this.search(parts[0]);
-        this.cut(parts[0]);
+          isRender: false
+        })
+        return;
       }
+
+      this.setState({
+        part: {
+          ...parts[0],
+          annotations: this.parseAnnotations(
+            parts[0].annotations,
+            parts[0].seq
+          )
+        },
+        displayList
+      });
+      this.search(parts[0]);
+      this.cut(parts[0]);
     } catch (err) {
       console.error(err);
     }
@@ -256,7 +248,7 @@ export default class SeqViz extends React.Component {
   render() {
     const { style, viewer } = this.props;
     let { annotations, compSeq, name, seq } = this.props;
-    const { centralIndex, cutSites, part, search, selection, displayList } = this.state;
+    const { centralIndex, cutSites, part, search, selection, displayList, isRender } = this.state;
 
     // part is either from a file/accession, or each prop was set
     seq = seq || part.seq || "";
@@ -265,8 +257,8 @@ export default class SeqViz extends React.Component {
     annotations =
       annotations && annotations.length ? annotations : part.annotations || [];
 
-    if (!seq.length) {
-      return <div className="la-vz-seqviz" />;
+    if (!seq.length || !isRender) {
+      return <div className="la-vz-seqviz"><div>Error when parsing this file to get sequence data</div></div>;
     }
 
     const linear = (viewer === "linear" || viewer.includes("both")) && (

@@ -228,7 +228,6 @@ const withEventRouter = WrappedComp =>
     };
 
     handleTripleClick = () => {
-      console.log('here');
       this.selectAllHotkey();
     };
 

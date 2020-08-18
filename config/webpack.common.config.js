@@ -48,17 +48,7 @@ module.exports = {
         test: /\.(css)$/,
         exclude: /node_modules/,
         use: ["style-loader", "css-loader"]
-      },
-      {
-        test: /\.(csv|tsv)$/,
-        exclude: /node_modules/,
-        use: ['csv-loader'],
-      },
-      {
-        test: /\.xml$/,
-        exclude: /node_modules/,
-        use: ['xml-loader'],
-      },
+      }
     ]
   }
 }

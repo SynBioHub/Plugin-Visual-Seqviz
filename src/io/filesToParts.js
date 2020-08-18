@@ -40,11 +40,14 @@ export default async (
     });
 
     return {
+      'isRender': true,
       'displayList': partLists.displayList,
       'parts': partLists.partLists.reduce((acc, partList) => acc.concat(partList), [])
     };
   } catch (err) {
-    throw err;
+    return {
+      'isRender': false
+    }
   }
 };
 
