@@ -35,6 +35,7 @@ export default class CircularSelection extends React.PureComponent {
       // calculate the length of the current selection region
       let selLength = 0;
       // start and end is the same, and something has been selected
+
       if (start === end && ref === "ALL") {
         selLength = seqLength;
       } else if (start > end) {

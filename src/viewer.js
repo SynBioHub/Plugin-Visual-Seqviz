@@ -7,12 +7,9 @@ import SeqViz from "./SeqViz/SeqViz.jsx";
 /**
  * Export a React component directly for React-based development
  */
-export { SeqViz };
-
-/**
- * Export a part, pUC, for development
- */
-export { default as pUC } from "./parts/pUC";
+export {
+  SeqViz
+};
 
 /**
  * Return a Viewer object with three properties:
@@ -28,9 +25,9 @@ export const Viewer = (element = "root", options) => {
   // get the HTML element by ID or use as is if passed directly
   const domElement =
     element.constructor.name.startsWith("HTML") &&
-    element.constructor.name.endsWith("Element")
-      ? element
-      : document.getElementById(element);
+    element.constructor.name.endsWith("Element") ?
+    element :
+    document.getElementById(element);
   let viewer = React.createElement(SeqViz, options, null);
 
   /**
@@ -63,7 +60,10 @@ export const Viewer = (element = "root", options) => {
       }
     });
 
-    options = { ...options, ...state };
+    options = {
+      ...options,
+      ...state
+    };
     viewer = React.createElement(SeqViz, options, null);
 
     if (rendered) {

@@ -124,7 +124,12 @@ const SingleAnnotation = props => {
     a.end >= a.start ? a.end - a.start : seqLength - a.start + a.end;
 
   // can't make an arc from a full circle
-  annLength = annLength === 0 ? seqLength - 0.1 : annLength;
+  if (annLength === 0) {
+    annLength = 1;
+  } else if (annLength === seqLength) {
+    annLength = seqLength - 0.1
+  }
+  // annLength = annLength === 0 ? seqLength - 0.1 : annLength;
 
   // how many degrees should it be rotated?
   const rotation = getRotation(a.start);
@@ -146,6 +151,7 @@ const SingleAnnotation = props => {
     arrowFWD: a.direction === 1,
     arrowREV: a.direction === -1
   });
+
   const namePath = generateArc({
     innerRadius: bottomHalf ? currBRadius : currTRadius,
     outerRadius: bottomHalf ? currBRadius : currTRadius,

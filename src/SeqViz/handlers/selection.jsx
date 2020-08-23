@@ -144,6 +144,7 @@ const withSelectionHandler = WrappedComp =>
                 ref: ref,
                 annref: annref,
                 type: type,
+                clockwise: true
               }
             })
             this.setSelection(selections);
@@ -361,6 +362,11 @@ const withSelectionHandler = WrappedComp =>
 
       const currBase = knownRange.start + bpsFromLeft;
 
+      // prevent the mouseup location exceed the sequence end base
+      if (currBase > knownRange.end) {
+        return knownRange.end;
+      }
+
       return currBase;
     };
 
@@ -389,6 +395,7 @@ const withSelectionHandler = WrappedComp =>
       const riseToRun = y / x;
       const posInRads = Math.atan(riseToRun);
       let posInDeg = posInRads * (180 / Math.PI) + 90; // convert and shift to vertical is 0
+
       if (x < 0) {
         posInDeg += 180; // left half of the viewer
       }
@@ -396,7 +403,8 @@ const withSelectionHandler = WrappedComp =>
 
       let currBase = Math.round(seq.length * posInPerc); // account for rotation of the viewer
       currBase += centralIndex;
-      if (currBase > seq.length) {
+
+      if (currBase > seq.length - 1) {
         currBase -= seq.length;
       }
       return currBase;
@@ -407,6 +415,7 @@ const withSelectionHandler = WrappedComp =>
      * properties of the selection that should be updated.
      */
     setSelection = newSelection => {
+
       const { setSelection } = this.props;
 
       // if (

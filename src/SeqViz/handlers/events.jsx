@@ -232,10 +232,11 @@ const withEventRouter = WrappedComp =>
     };
 
     handleDoubleClick = (target) => {
-      const uri = target.getAttribute('uri');
-      // if (target.tagName === 'svg') {
-      //   uri = target.parentNode.getAttribute('uri');
-      // }
+      let uri = target.getAttribute('uri');
+      if (target.tagName === 'path' && !uri) {
+        uri = target.closest("g[uri]").getAttribute('uri');
+        // uri = target.parentNode.getAttribute('uri');
+      }
       if (uri) {
         window.location.assign(uri);
       }
@@ -261,7 +262,7 @@ const withEventRouter = WrappedComp =>
       const { mouseEvent } = this.props;
 
       if (e.type === "mouseup") {
-        this.resetClicked();
+        this.resetClicked(this.clickedOnce, e.target, this.clickedTwice);
         if (this.clickedOnce === e.target && this.clickedTwice === e.target) {
           this.handleTripleClick();
           this.resetClicked();

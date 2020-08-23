@@ -8,11 +8,12 @@ export default class Rendering extends React.Component {
   }
   render() {
     const { display } = this.props;
-    const safety = 20;
+    const safetx = 150;
+    const safety = 40;
     return (
       <CentralIndexContext.Consumer>
         {({ setCentralIndex }) => (
-          <div className='visbol-container' style={{ width: `${display.width * 2 + safety}px`, height: `${display.height * 2 + display.largestInset + safety}px`, padding: 5 + 'px' }}>
+          <div className='visbol-container' style={{ width: `${display.width * 2 + safetx}px`, height: `${display.height * 2 + display.largestInset + safety}px`, padding: 10 + 'px' }}>
             <Visbol {...this.props} setCentralIndex={setCentralIndex} />
           </div>
         )}

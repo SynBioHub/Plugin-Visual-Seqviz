@@ -30,28 +30,27 @@ app.post('/Evaluate', function (req, res) {
 })
 
 app.post('/Run', async (req, res) => {
-  let type = req.body.type.toString();
-  if (type === 'Collection') res.status(404).end();
-  else {
-    let url = req.body.complete_sbol.toString();
-    let hostAddr = req.get('host')
-    request.get(url, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        var csv = body;
+  let url = req.body.complete_sbol.toString();
+  let top_level = req.body.top_level.toString();
+  let hostAddr = req.get('host');
+  request.get(url, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var csv = body;
 
-        const propdata = {
-          style: {
-            height: 600,
-            width: 1100
-          },
-          size: {
-            width: 500,
-            height: 600
-          },
-          file: csv,
-        }
+      const propdata = {
+        style: {
+          height: 600,
+          width: 1100
+        },
+        size: {
+          width: 500,
+          height: 600
+        },
+        file: csv,
+        topLevel: top_level
+      }
 
-        const theHtml = `<!doctype html>
+      const theHtml = `<!doctype html>
                         <html>
                         <head><title>sequence view</title></head>
                         <body>
@@ -61,12 +60,11 @@ app.post('/Run', async (req, res) => {
                         </body>
                         </html>
                         `;
-        res.send(theHtml);
-      } else {
-        console.log(error);
-      }
-    })
-  }
+      res.send(theHtml);
+    } else {
+      console.log(error);
+    }
+  })
 })
 
 app.listen(port, () => console.log(`Example app listening at http://${addr}:${port}`))

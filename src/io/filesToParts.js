@@ -3,10 +3,6 @@ import path from "path";
 import {
   COLORS
 } from "../utils/colors";
-import {
-  dnaComplement,
-  partFactory
-} from "../utils/parser";
 import parseSBOL from "./parsers/sbol";
 
 
@@ -18,6 +14,7 @@ export default async (
   files,
   options = {
     fileName: "",
+    topLevel: "",
     colors: COLORS,
     backbone: ""
   }
@@ -25,13 +22,14 @@ export default async (
   try {
     const partLists = await new Promise((resolve, reject) => {
       const {
-        fileName = "", colors = [], backbone = ""
+        fileName = "", colors = [], backbone = "", topLevel = ""
       } = options;
 
       // if it's just a single file string
       if (typeof files === "string") {
         let parseresult = fileToParts(files, {
           fileName,
+          topLevel,
           colors,
           backbone
         })
@@ -61,12 +59,13 @@ const fileToParts = async (
   file,
   options = {
     fileName: "",
+    topLevel: "",
     colors: [],
     backbone: ""
   }
 ) => {
   const {
-    fileName = "", colors = [], backbone = ""
+    fileName = "", topLevel = "", colors = [], backbone = ""
   } = options;
 
   if (!file) {
@@ -98,18 +97,9 @@ const fileToParts = async (
       case file.includes("RDF"):
         let {
           displayList, partLists
-        } = await parseSBOL(file, fileName, colors);
+        } = await parseSBOL(file, fileName, topLevel, colors);
         parts = partLists;
         displayLists = displayList;
-        break;
-
-        // a DNA text file without an official formatting
-      case dnaOnlyFile:
-        parts = [{
-          ...partFactory(),
-          ...dnaComplement(file),
-          name
-        }];
         break;
 
       default:

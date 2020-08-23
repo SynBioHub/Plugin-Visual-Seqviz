@@ -23,7 +23,7 @@ function GlyphRenderer(props) {
             })}
         >
             <Label name={item.name} x={item.labelLocation.x} y={backboneY - item.labelLocation.y} />
-            <ParametricSVG svgString={item.defaultString} innerOnly={true} params={{ baseline_x: baseline_x, baseline_y: baseline_y }} uri={item.uri} />
+            <ParametricSVG svgString={item.defaultString} innerOnly={true} params={{ baseline_x: baseline_x, baseline_y: baseline_y }} />
         </g>
     );
 
@@ -32,7 +32,7 @@ function GlyphRenderer(props) {
         const elements = document.getElementsByClassName(className);
         if (isTooltipShown) {
             let view = document.getElementsByClassName('la-vz-seqviz')[0].getBoundingClientRect();
-            // console.log(event.clientX, event.clientY, event.offsetX, event.offsetY, linear)
+
             let left = event.clientX - view.left;
             let top = event.clientY - view.top;
             let tooltip = document.getElementById("linear-tooltip");

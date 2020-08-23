@@ -1,6 +1,5 @@
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -77,9 +76,19 @@ module.exports = {
     minimizer: [
       // new UglifyJsPlugin()
       new TerserPlugin({
-        parallel: true,
+        parallel: 4,
         terserOptions: {
-          mangle: true
+          comments: false,
+          compress: {
+            // 删除无用的代码
+            unused: true,
+            // 删掉 debugger
+            drop_debugger: true, // eslint-disable-line
+            // 移除 console
+            // drop_console: true, // eslint-disable-line
+            // 移除无用的代码
+            dead_code: true // eslint-disable-line
+          },
         },
       })
     ]

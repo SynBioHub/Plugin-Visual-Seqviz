@@ -10,7 +10,7 @@ const defaultString = `
 
 <path
       id="poly-a-site-background" 
-      parametric:d="M{baseline_x+pad_before},{(baseline_y-baseline_offset)-(width*0.3)} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)-pad_top-(width*0.3)} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)+(width*0.3)} L{baseline_x+pad_before},{(baseline_y-baseline_offset)+(width*0.3)} Z}" 
+      parametric:d="M{baseline_x+pad_before},{(baseline_y-baseline_offset)-(width*0.3)} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)-pad_top-(width*0.3)} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)+(width*0.3)} L{baseline_x+pad_before},{(baseline_y-baseline_offset)+(width*0.3)} Z" 
       d="M2,19.0 L22,16.0 L22,31.0 L2,31.0 Z"
       fill="rgb(255,255,255)"
         fill-rule="nonzero"
@@ -62,7 +62,7 @@ const dimensions = [20, 6];
 const inset = 0;
 
 export {
-    defaultString,
-    dimensions,
-    inset,
+      defaultString,
+      dimensions,
+      inset,
 }

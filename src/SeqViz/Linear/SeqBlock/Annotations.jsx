@@ -8,7 +8,7 @@ export default class AnnotationRows extends React.PureComponent {
     const elements = document.getElementsByClassName(className);
     if (isTooltipShown) {
       let view = document.getElementsByClassName('la-vz-seqviz')[0].getBoundingClientRect();
-      // console.log(event.clientX, event.clientY, event.offsetX, event.offsetY, linear)
+
       let left = event.clientX - view.left;
       let top = event.clientY - view.top;
       let tooltip = document.getElementById("linear-tooltip");

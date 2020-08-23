@@ -35,7 +35,7 @@ const sha1 = require('sha1');
  * representation of a part(s). an example of this type of file can be
  * found in ../examples/j5.SBOL.xml
  */
-export default async (source, fileName, colors = []) =>
+export default async (source, fileName, topLevel, colors = []) =>
   new Promise((resolve, reject) => {
     // util reject function that will be triggered if any fields fail
     const rejectSBOL = errType =>
@@ -50,7 +50,7 @@ export default async (source, fileName, colors = []) =>
         var partLists = [];
         var segments = [];
         sbol.componentDefinitions.forEach(function (componentDefinition) {
-          if (componentDefinition && !(componentDefinition instanceof URI) && componentDefinition.uri) {
+          if (componentDefinition && !(componentDefinition instanceof URI) && componentDefinition.uri && componentDefinition.uri.toString() === topLevel) {
             var {
               partList,
               segment
@@ -79,7 +79,7 @@ export default async (source, fileName, colors = []) =>
           interactions,
         }
 
-        var partLists = partLists.filter(part => part.segmentId === sbol.componentDefinitions[0].uri.toString());
+        // var partLists = partLists.filter(part => part.segmentId === sbol.componentDefinitions[0].uri.toString());
 
         if (partLists.length === 0) {
           rejectSBOL(err);
