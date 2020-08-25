@@ -61,28 +61,25 @@ app.post('/Run', async (req, res) => {
     }
 
     const theHtml = `<!doctype html>
-                        <html>
-                        <head><title>sequence view</title></head>
-                        <body>
+                    <html>
+                      <head><title>sequence view</title></head>
+                      <body>
                         <div id="reactele"></div>
                         <script type="text/javascript">window.__INITIAL_DATA__ = ${serialize(propdata)}</script>
-                        <script type="text/javascript" src="http://${hostAddr}/seqviz.js" charset="utf-8"></script>
-                        <script type="text/javascript" src="http://${hostAddr}/vendor.js" charset="utf-8"></script>
-                        </body>
-                        </html>
-                        `;
+                        <script type="text/javascript" src="https://${hostAddr}/seqviz.js" charset="utf-8"></script>
+                      </body>
+                    </html>`;
     res.send(theHtml);
   } catch (err) {
     const theHtml = `<!doctype html>
-                        <html>
-                        <head><title>sequence view</title></head>
-                        <body>
+                    <html>
+                      <head><title>sequence view</title></head>
+                      <body>
                         <div id="reactele">
                         Error when parsing this file to get sequence data!
                         </div>
-                        </body>
-                        </html>
-                        `;
+                      </body>
+                    </html>`;
     res.send(theHtml);
   }
 })
