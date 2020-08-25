@@ -2,7 +2,7 @@ import path from "path";
 
 import {
   COLORS
-} from "../utils/colors";
+} from "./utils/colors";
 import parseSBOL from "./parsers/sbol";
 
 
@@ -38,14 +38,11 @@ export default async (
     });
 
     return {
-      'isRender': true,
       'displayList': partLists.displayList,
       'parts': partLists.partLists.reduce((acc, partList) => acc.concat(partList), [])
     };
   } catch (err) {
-    return {
-      'isRender': false
-    }
+    throw err;
   }
 };
 
@@ -75,39 +72,34 @@ const fileToParts = async (
   // this is a check for an edge case, where the user uploads come kind
   // of file that's full of bps but doesn't fit into a defined type
   const firstLine = file.search ? file.substring(0, file.search("\n")) : "";
-  const dnaCharLength = firstLine.replace(/[^atcgATCG]/, "").length;
-  const dnaOnlyFile = dnaCharLength / firstLine.length > 0.8; // is it >80% dna?
-  const sourceName = fileName.split(path.sep).pop();
-  const name =
-    fileName && sourceName ?
-    sourceName.substring(0, sourceName.search("\\.")) :
-    "Untitled";
-  const source = {
-    name: sourceName,
-    file: file
-  };
+  // const dnaCharLength = firstLine.replace(/[^atcgATCG]/, "").length;
+  // const dnaOnlyFile = dnaCharLength / firstLine.length > 0.8; // is it >80% dna?
+  // const sourceName = fileName.split(path.sep).pop();
+  // const name =
+  //   fileName && sourceName ?
+  //   sourceName.substring(0, sourceName.search("\\.")) :
+  //   "Untitled";
+  // const source = {
+  //   name: sourceName,
+  //   file: file
+  // };
 
   let parts;
   let displayLists;
 
-  try {
-    switch (true) {
-
-      // SBOL
-      case file.includes("RDF"):
-        let {
-          displayList, partLists
-        } = await parseSBOL(file, fileName, topLevel, colors);
-        parts = partLists;
-        displayLists = displayList;
-        break;
-
-      default:
-        throw Error(`${fileName} File type not recognized: ${file}`);
-    }
-  } catch (e) {
-    console.error(e);
-    return null;
+  if (file.includes("RDF")) {
+    let {
+      displayList,
+      partLists
+    } = await parseSBOL(file, fileName, topLevel, colors)
+    // .catch(err => {
+    //   console.log(err);
+    //   throw err;
+    // });
+    parts = partLists;
+    displayLists = displayList;
+  } else {
+    throw Error(`${fileName} File type not recognized: ${file}`);
   }
 
   // add the source information to all parts
@@ -116,7 +108,6 @@ const fileToParts = async (
       'displayList': displayLists,
       'partLists': parts.map(p => ({
         ...p,
-        source
       }))
     };
   }

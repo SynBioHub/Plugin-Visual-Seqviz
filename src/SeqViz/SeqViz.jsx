@@ -1,7 +1,6 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 
-import filesToParts from "../io/filesToParts";
 import { cutSitesInRows } from "../utils/digest";
 import isEqual from "../utils/isEqual";
 import { directionality, dnaComplement } from "../utils/parser";
@@ -97,7 +96,6 @@ export default class SeqViz extends React.Component {
     super(props);
 
     this.state = {
-      isRender: true,
       accession: "",
       centralIndex: {
         circular: 0,
@@ -107,67 +105,49 @@ export default class SeqViz extends React.Component {
       cutSites: [],
       selection: [{ ...defaultSelection }],
       search: [],
-      displayList: {},
       annotations: this.parseAnnotations(props.annotations, props.seq),
       part: {}
     };
   }
 
-  componentDidMount = async () => {
-    await this.setPart();
+  componentDidMount = () => {
+    this.setPart();
   };
 
-  componentDidUpdate = async (
-    { accession, backbone, enzymes, file, search },
-    { part }
-  ) => {
-    if (
-      accession !== this.props.accession ||
-      backbone !== this.props.backbone ||
-      file !== this.props.file
-    ) {
-      await this.setPart(); // new accesion/remote ID
-    } else if (
-      search.query !== this.props.search.query ||
-      search.mismatch !== this.props.search.mismatch
-    ) {
-      this.search(part); // new search parameters
-    } else if (!isEqual(enzymes, this.props.enzymes)) {
-      this.cut(part); // new set of enzymes for digest
-    }
-  };
+  // componentDidUpdate = ({ accession, backbone, enzymes, isRender, search }, { part }) => {
+  //   if (
+  //     accession !== this.props.accession ||
+  //     backbone !== this.props.backbone ||
+  //     isRender !== this.props.isRender
+  //   ) {
+  //     this.setPart(); // new accesion/remote ID
+  //   } else if (
+  //     search.query !== this.props.search.query ||
+  //     search.mismatch !== this.props.search.mismatch
+  //   ) {
+  //     this.search(part); // new search parameters
+  //   } else if (!isEqual(enzymes, this.props.enzymes)) {
+  //     this.cut(part); // new set of enzymes for digest
+  //   }
+  // }
 
   /**
    * Set the part from a file or an accession ID
    */
-  setPart = async () => {
-    const { file } = this.props;
+  setPart = () => {
+    const { parts } = this.props;
 
-    try {
-      const { displayList, parts, isRender } = await filesToParts(file, this.props);
-
-      if (!isRender) {
-        this.setState({
-          isRender: false
-        })
-        return;
-      }
-
-      this.setState({
-        part: {
-          ...parts[0],
-          annotations: this.parseAnnotations(
-            parts[0].annotations,
-            parts[0].seq
-          )
-        },
-        displayList
-      });
-      this.search(parts[0]);
-      this.cut(parts[0]);
-    } catch (err) {
-      console.error(err);
-    }
+    this.setState({
+      part: {
+        ...parts[0],
+        annotations: this.parseAnnotations(
+          parts[0].annotations,
+          parts[0].seq
+        )
+      },
+    });
+    this.search(parts[0]);
+    this.cut(parts[0]);
   };
 
   /**
@@ -249,8 +229,8 @@ export default class SeqViz extends React.Component {
 
   render() {
     const { style, viewer } = this.props;
-    let { annotations, compSeq, name, seq } = this.props;
-    const { centralIndex, cutSites, part, search, selection, displayList, isRender } = this.state;
+    let { annotations, compSeq, name, seq, displayList } = this.props;
+    const { centralIndex, cutSites, part, search, selection } = this.state;
 
     // part is either from a file/accession, or each prop was set
     seq = seq || part.seq || "";
@@ -259,7 +239,7 @@ export default class SeqViz extends React.Component {
     annotations =
       annotations && annotations.length ? annotations : part.annotations || [];
 
-    if (!seq.length || !isRender) {
+    if (!seq.length) {
       return <div className="la-vz-seqviz"><div>Error when parsing this file to get sequence data</div></div>;
     }
 

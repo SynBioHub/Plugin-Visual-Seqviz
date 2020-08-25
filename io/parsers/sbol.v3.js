@@ -1,14 +1,14 @@
 import {
   partFactory,
   dnaComplement
-} from "../../utils/parser";
+} from "../utils/parser";
 import {
   annotationFactory
-} from "../../utils/sequence";
+} from "../utils/sequence";
 import {
   chooseRandomColor
-} from "../../utils/colors";
-import randomid from "../../utils/randomid";
+} from "../utils/colors";
+import randomid from "../utils/randomid";
 import sboToInteractionType from '../sboToInteractionType';
 import sboToRole from '../sboToRole';
 import soToGlyphType from '../soToGlyphType';
@@ -37,11 +37,10 @@ const sha1 = require('sha1');
  */
 export default async (source, fileName, topLevel, colors = []) =>
   new Promise((resolve, reject) => {
-    // util reject function that will be triggered if any fields fail
-    const rejectSBOL = errType =>
-      reject(new Error(`Failed on SBOLv2 file: ${errType}`));
-
     // weird edge case with directed quotation characters
+    const rejectSBOL = () => {
+      return reject('rejected');
+    };
     SBOLDocument.loadRDF(source, function (err, sbol) {
       if (err) {
         rejectSBOL(err);
@@ -492,7 +491,15 @@ function getDisplayListSegment(componentDefinition, config, share, i) {
       sequence.push({
         strand: strand,
         type: glyph,
-        ranges: sequenceAnnotation.ranges,
+        ranges: sequenceAnnotation.ranges.map(
+          range => {
+            return {
+              'displayId': range.displayId,
+              'name': range.name,
+              'start': range.start,
+              'end': range.end,
+            }
+          }),
         id: annId,
         name: annName,
         uri: uri,

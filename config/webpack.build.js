@@ -62,17 +62,14 @@ module.exports = {
   },
   resolve: {
     alias: {
-      react: path.resolve(__dirname, "../node_modules/react"),
+      "react": path.resolve(__dirname, "../node_modules/react"),
       "react-dom": path.resolve(__dirname, "../node_modules/react-dom")
     }
   },
-  // plugins: [
-  //   new webpack.BannerPlugin(banner)
-  //   new BundleAnalyzerPlugin({ defaultSizes: "stat" })
-  // ],
   optimization: {
     minimize: true,
-    nodeEnv: "production",
+    // nodeEnv: "production",
+    concatenateModules: false,
     minimizer: [
       // new UglifyJsPlugin()
       new TerserPlugin({
@@ -80,13 +77,13 @@ module.exports = {
         terserOptions: {
           comments: false,
           compress: {
-            // 删除无用的代码
+            // delete unused code
             unused: true,
-            // 删掉 debugger
+            // delete debugger
             drop_debugger: true, // eslint-disable-line
-            // 移除 console
-            // drop_console: true, // eslint-disable-line
-            // 移除无用的代码
+            // delete console
+            drop_console: true, // eslint-disable-line
+            // delete dead code
             dead_code: true // eslint-disable-line
           },
         },
