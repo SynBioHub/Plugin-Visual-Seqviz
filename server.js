@@ -39,7 +39,9 @@ app.post('/Run', async (req, res) => {
   let top_level = req.body.top_level.toString();
   let hostAddr = req.get('host');
   try {
+    // Get SBOL file content string
     const csv = await getFileData(url);
+    // parse SBOL file to get data for sequence view rendering
     const {
       displayList,
       parts
@@ -66,7 +68,7 @@ app.post('/Run', async (req, res) => {
                       <body>
                         <div id="reactele"></div>
                         <script type="text/javascript">window.__INITIAL_DATA__ = ${serialize(propdata)}</script>
-                        <script type="text/javascript" src="https://${hostAddr}/seqviz.js" charset="utf-8"></script>
+                        <script type="text/javascript" src="http://${hostAddr}/seqviz.js" charset="utf-8"></script>
                       </body>
                     </html>`;
     res.send(theHtml);

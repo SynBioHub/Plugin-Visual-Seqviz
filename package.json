@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config ./config/webpack.dev.config.js",
     "start": "node start.js",
+    "pack": "webpack --config ./config/webpack.build.js --display-error-details --verbose",
     "dev": "webpack --config ./config/webpack.build.js --display-error-details --verbose && nodemon --exec babel-node server.js"
   },
   "keywords": [],

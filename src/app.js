@@ -1,6 +1,6 @@
 import React from "react";
 import { hydrate } from "react-dom";
-import { SeqViz } from "./viewer";
+import SeqViz from "./SeqViz/SeqViz.jsx";
 
 // change non iterable obejct to iterable object, then can use spread operator
 function* iterate_object(o) {
