@@ -2,11 +2,15 @@
 
 Sequence View Plugin is a visualization plugin engine for SynBioHub to enhance the functional annotations of DNA sequence which are coordinated with the SBOL Visual standard. 
 
+# Interface
+
+![Sequence View Plugin](./images/interface.png)
+
 # Installation
 
 Follow the instructions on the [GitHub README](https://github.com/SynBioHub/synbiohub#manual-installation) to install SynBioHub locally on your system and start the SynBioHub process. In the Admin module, configure the plugin as follows:
 
-![configuration](./public/configuration.png)
+![configuration](./images/configuration.png)
 
 1. Clone the Sequence View Plugin repository `git clone git@github.com:alicelh/sequence-view-plugin.git`
 2. Change to the  Sequence View Plugin directory `cd sequence-view-plugin`
