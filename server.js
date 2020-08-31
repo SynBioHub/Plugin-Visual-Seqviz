@@ -6,9 +6,6 @@ const request = require('request');
 const serialize = require("serialize-javascript");
 
 import filesToParts from "./io/filesToParts";
-import {
-  error
-} from 'console';
 
 const app = express()
 const port = 5000
