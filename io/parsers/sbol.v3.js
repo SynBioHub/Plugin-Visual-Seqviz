@@ -48,6 +48,7 @@ export default async (source, fileName, topLevel, colors = []) =>
         // it's a collection of DnaComponents, parse each to a part
         var partLists = [];
         var segments = [];
+        var name = '';
         sbol.componentDefinitions.forEach(function (componentDefinition) {
           if (componentDefinition && !(componentDefinition instanceof URI) && componentDefinition.uri && componentDefinition.uri.toString() === topLevel) {
             var {
@@ -57,6 +58,7 @@ export default async (source, fileName, topLevel, colors = []) =>
             // segment = recurseGetDisplayList(componentDefinition, segment);
             partLists = partLists.concat(partList);
             segments = segments.concat(segment);
+            name = componentDefinition.name || componentDefinition.displayId;
           }
         });
 
@@ -71,7 +73,7 @@ export default async (source, fileName, topLevel, colors = []) =>
 
         const displayList = {
           version: 1,
-          name: sbol.componentDefinitions[0].name || sbol.componentDefinitions[0].displayId,
+          name: name,
           components: [{
             segments
           }],

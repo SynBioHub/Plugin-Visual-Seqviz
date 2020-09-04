@@ -14,15 +14,18 @@ app.use(express.json());
 //app.use(express.static("public"));
 
 app.get('/seqviz.js', function (req, res) {
+  console.log('seqviz.js')
   res.sendFile(path.join(__dirname, 'public', 'seqviz.js'));
 })
 
 app.get('/Status', function (req, res) {
+  console.log('Status')
   res.status(200).send('The plugin is up and running')
 })
 
 app.post('/Evaluate', function (req, res) {
   let type = req.body.type.toString();
+  console.log('evaluate '+type)
   if (type === 'Component') {
     res.status(200).send('The app can handle this input');
   } else {
@@ -34,6 +37,7 @@ app.post('/Run', async (req, res) => {
   let url = req.body.complete_sbol.toString();
   let top_level = req.body.top_level.toString();
   let hostAddr = req.get('host');
+  console.log('run url='+url+' top='+top_level+' hostAddr='+hostAddr)
   try {
     // Get SBOL file content string
     const csv = await getFileData(url);
@@ -64,7 +68,7 @@ app.post('/Run', async (req, res) => {
                       <body>
                         <div id="reactele"></div>
                         <script type="text/javascript">window.__INITIAL_DATA__ = ${serialize(propdata)}</script>
-                        <script type="text/javascript" src="https://${hostAddr}/seqviz.js" charset="utf-8"></script>
+                        <script type="text/javascript" src="http://${hostAddr}/seqviz.js" charset="utf-8"></script>
                       </body>
                     </html>`;
     res.send(theHtml);
