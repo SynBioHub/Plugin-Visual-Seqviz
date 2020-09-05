@@ -12,7 +12,7 @@ Follow the instructions on the [GitHub README](https://github.com/SynBioHub/synb
 
 ![configuration](./images/configuration.png)
 
-1. Clone the Sequence View Plugin repository `git clone git@github.com:alicelh/sequence-view-plugin.git`
+1. Clone the Sequence View Plugin repository `git clone https://github.com/alicelh/sequence-view-plugin.git`
 2. Change to the  Sequence View Plugin directory `cd sequence-view-plugin`
 3. Install all the dependencies `npm install`
 4. Start the plugin server `npm start`
