@@ -5,10 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config ./config/webpack.dev.config.js",
+    "build": "webpack --config ./config/webpack.build.js",
     "start": "node start.js",
-    "pack": "webpack --config ./config/webpack.build.js --display-error-details --verbose",
-    "dev": "webpack --config ./config/webpack.build.js --display-error-details --verbose && nodemon --exec babel-node server.js"
+    "local": "webpack --config ./config/webpack.build.js --display-error-details --verbose && nodemon --exec babel-node localserver.js"
   },
   "keywords": [],
   "author": "",

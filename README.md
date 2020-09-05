@@ -12,12 +12,11 @@ Follow the instructions on the [GitHub README](https://github.com/SynBioHub/synb
 
 ![configuration](./images/configuration.png)
 
-1. Clone the Sequence View Plugin repository `git clone git@github.com:alicelh/sequence-view-plugin.git`
+1. Clone the Sequence View Plugin repository `git clone https://github.com/alicelh/sequence-view-plugin.git`
 2. Change to the  Sequence View Plugin directory `cd sequence-view-plugin`
 3. Install all the dependencies `npm install`
-4. Start the plugin server `npm start`
-5. When you change the plugin code and want to see the updated effect in the interface, use `npm run dev`
+4. Start the plugin server `npm run local`
 
 # Publish
 
-Releases are published automatically using GitHub Actions. There is an action which fires on release publication. It publishes an image to Docker Hub as synbiohub/plugin-visual-seqviz, which will be used in public SynBioHub.
+Releases are published automatically using GitHub Actions. There is an action which fires on release publication. It publishes an image to Docker Hub as synbiohub/plugin-visual-seqviz, which will be used in public SynBioHub. It should be noticed that docker use server.js to start the server. The only difference between server.js and localserver.js is on line 67 where the src uses http or https. Thus, what other code updates in localserver.js should also be reflected in server.js. 
