@@ -104,7 +104,7 @@ const withSelectionHandler = WrappedComp =>
      *
      * @param {React.SyntheticEvent} e  		the mouseEvent
      */
-    mouseEvent = e => {
+    mouseEvent = (e, id) => {
       const { Circular, Linear, Visbol } = this.props;
 
       // should not be updating selection since it's not a drag event time
@@ -113,8 +113,8 @@ const withSelectionHandler = WrappedComp =>
       }
 
       var knownRange;
-      if (Visbol) {
-        knownRange = this.idToRange.get(e.target.parentNode.id);
+      if (Visbol && id) {
+        knownRange = this.idToRange.get(id);
       } else {
         knownRange = this.dragEvent
           ? this.idToRange.get(e.currentTarget.id) // only look for SeqBlocks

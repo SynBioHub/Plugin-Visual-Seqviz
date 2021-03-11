@@ -342,7 +342,7 @@ const withEventRouter = WrappedComp =>
             this.eventRouter = ref;
           }}
         >
-          <WrappedComp {...rest} mouseEvent={this.handleMouseEvent} />
+          <WrappedComp {...rest} {...this.props} mouseEvent={this.handleMouseEvent} />
         </div>
       );
     }

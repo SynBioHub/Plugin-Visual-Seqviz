@@ -1,9 +1,10 @@
-import * as React from "react";
+import React from "react";
+import withSelectionHandler from './handlers/selection.jsx';
 
-import prepareDisplay from './Visbol/design/prepareDisplay';
-import Rendering from './Visbol/rendering/reactRender';
+import { prepareDisplay } from 'visbol';
+import Rendering from 'visbol-react';
 
-export default class VisbolViewer extends React.Component {
+class VisbolViewer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,14 +29,35 @@ export default class VisbolViewer extends React.Component {
     })
   }
 
+  updateReferences(display, inputRef) {
+    if (display) {
+      display.renderGlyphs();
+    display.toPlace.forEach(item => {
+      if (item.isGlyph) {
+        inputRef(item.id, {
+          ref: item.id,
+          annref: item.id,
+          type: "ANNOTATION",
+          ranges: item.ranges
+        });
+      }
+    });
+    }
+  }
+
   render() {
     const { display } = this.state;
-    const { selection, setSelection, Visbol, seq, name } = this.props;
-    if (display) {
-      return <Rendering display={display} selection={selection} setSelection={setSelection} Visbol={Visbol} name={name} seq={seq} />
+    this.updateReferences(display, this.props.inputRef);
+    var id = undefined;
+    if (this.props.selection && this.props.selection[0])
+      id = this.props.selection[0].annref;
+    if (display && this.props.Visbol) {
+      return <Rendering display={display} selection={this.props.selection ? this.props.selection[0].annref : undefined} mouseEvent={this.props.mouseEvent} hideNavigation={true} size={1.75} customTooltip={true} />
     }
     else {
       return (<div></div>);
     }
   }
 }
+
+export default withSelectionHandler(VisbolViewer);

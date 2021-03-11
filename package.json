@@ -51,6 +51,9 @@
     "sboljs": "^2.2.5",
     "sbolmeta": "^0.3.2",
     "serialize-javascript": "^3.1.0",
-    "sha1": "^1.1.1"
+    "sha1": "^1.1.1",
+    "urijs": "^1.19.2",
+    "visbol": "^2.0.16",
+    "visbol-react": "^1.0.57"
   }
 }
