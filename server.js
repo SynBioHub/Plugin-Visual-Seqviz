@@ -26,7 +26,7 @@ app.get('/Status', function (req, res) {
 app.post('/Evaluate', function (req, res) {
   let type = req.body.type.toString();
   console.log('evaluate ' + type)
-  if (type === 'Component') {
+  if (type === 'Component' || type === 'ComponentDefinition') {
     res.status(200).send('The app can handle this input');
   } else {
     res.status(404).end();
