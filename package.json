@@ -48,7 +48,7 @@
     "react-parametric-svg": "^0.1.6",
     "react-sizeme": "^2.6.12",
     "request": "^2.88.2",
-    "sboljs": "^2.2.5",
+    "sboljs": "^2.2.8",
     "sbolmeta": "^0.3.2",
     "serialize-javascript": "^3.1.0",
     "sha1": "^1.1.1",
