@@ -2,8 +2,7 @@ name: Build and push docker images
 
 on:
   push:
-    branches:
-      - master
+    branches: [main]
 
 jobs:
   build-and-push:
@@ -14,11 +13,17 @@ jobs:
       name: Checkout source code
     - name: Build the Docker image
       run: |
-        docker build . --tag synbiohub/plugin-visual-seqviz:snapshot
+        repo_name_lower=$(echo ${{ github.event.repository.name }}| tr [:upper:] [:lower:])
+        tag="synbiohub/${repo_name_lower}:snapshot"
+        echo $tag
+        docker build . --tag $tag
     - uses: azure/docker-login@v1
       with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Push the image to Docker Hub
       run: |
-        docker push synbiohub/plugin-visual-seqviz:snapshot
+        repo_name_lower=$(echo ${{ github.event.repository.name }}| tr [:upper:] [:lower:])
+        tag="synbiohub/${repo_name_lower}:snapshot"
+        echo $tag
+        docker push $tag

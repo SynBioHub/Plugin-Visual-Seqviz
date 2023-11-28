@@ -1,7 +1,7 @@
 # Project Description
 
 Sequence View Plugin is a visualization plugin engine for SynBioHub to enhance the functional annotations of DNA sequence which are coordinated with the SBOL Visual standard. 
-
+ 
 # Interface
 
 ![Sequence View Plugin](./images/interface.png)
