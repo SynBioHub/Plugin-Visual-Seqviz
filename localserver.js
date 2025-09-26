@@ -7,7 +7,7 @@ const serialize = require("serialize-javascript");
 import filesToParts from "./io/filesToParts";
 
 const app = express()
-const port = 5000
+const port = 5050
 const addr = "localhost"
 
 app.use(express.json());
@@ -40,7 +40,14 @@ app.post('/Run', async (req, res) => {
   console.log('run url=' + url + ' top=' + top_level + ' hostAddr=' + hostAddr)
   try {
     // Get SBOL file content string
-    const csv = await getFileData(url);
+    let csv;
+    if(req.body.token) {
+      csv = await getFileData(url, req.body.token);
+    }
+    else {
+      csv = await getFileData(url);
+    }
+    
     // parse SBOL file to get data for sequence view rendering
     const {
       displayList,
@@ -86,9 +93,17 @@ app.post('/Run', async (req, res) => {
   }
 })
 
-function getFileData(url) {
+function getFileData(url, token=null) {
   return new Promise((resolve, reject) => {
-    request.get(url, function (error, response, body) {
+    const options = {
+      url: url,
+      headers: {}
+    };
+    if (token) {
+      options.headers['X-authorization'] = token;
+      console.log('getFileData with token')
+    }
+    request.get(options, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         return resolve(body);
       } else {
