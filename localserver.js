@@ -86,6 +86,7 @@ app.post('/Run', async (req, res) => {
                       <body>
                         <div id="reactele">
                         Error when parsing this file to get sequence data!
+                        ${err.toString()}
                         </div>
                       </body>
                     </html>`;

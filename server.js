@@ -40,7 +40,13 @@ app.post('/Run', async (req, res) => {
   console.log('run url=' + url + ' top=' + top_level + ' hostAddr=' + hostAddr)
   try {
     // Get SBOL file content string
-    const csv = await getFileData(url);
+    let csv;
+    if(req.body.token) {
+      csv = await getFileData(url, req.body.token);
+    }
+    else {
+      csv = await getFileData(url);
+    }
     // parse SBOL file to get data for sequence view rendering
     const {
       displayList,
