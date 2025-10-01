@@ -93,9 +93,16 @@ app.post('/Run', async (req, res) => {
   }
 })
 
-function getFileData(url) {
+function getFileData(url, token=null) {
   return new Promise((resolve, reject) => {
-    request.get(url, function (error, response, body) {
+    const options = {
+      url: url,
+      headers: {}
+    };
+    if (token) {
+      options.headers['X-authorization'] = token;
+    }
+    request.get(options, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         return resolve(body);
       } else {

@@ -102,7 +102,6 @@ function getFileData(url, token=null) {
     };
     if (token) {
       options.headers['X-authorization'] = token;
-      console.log('getFileData with token')
     }
     request.get(options, function (error, response, body) {
       if (!error && response.statusCode == 200) {
