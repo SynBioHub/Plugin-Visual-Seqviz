@@ -37,7 +37,13 @@ app.post('/Run', async (req, res) => {
   let url = req.body.complete_sbol.toString();
   let top_level = req.body.top_level.toString();
   let hostAddr = req.get('host');
-  console.log('run url=' + url + ' top=' + top_level + ' hostAddr=' + hostAddr)
+  // Optional override via environment variable (use full host or include protocol)
+  const overrideHost = process.env.SEQVIZ_HOST;
+  const scriptUrl = overrideHost
+    ? (overrideHost.match(/^https?:\/\//)
+        ? overrideHost.replace(/\/$/, '') + '/seqviz.js'
+        : 'http://' + overrideHost.replace(/\/$/, '') + '/seqviz.js')
+    : `http://${hostAddr}/seqviz.js`;
   try {
     // Get SBOL file content string
     let csv;
@@ -75,7 +81,7 @@ app.post('/Run', async (req, res) => {
                       <body>
                         <div id="reactele"></div>
                         <script type="text/javascript">window.__INITIAL_DATA__ = ${serialize(propdata)}</script>
-                        <script type="text/javascript" src="http://${hostAddr}/seqviz.js" charset="utf-8"></script>
+                        <script type="text/javascript" src="${scriptUrl}" charset="utf-8"></script>
                       </body>
                     </html>`;
     res.send(theHtml);
