@@ -10,6 +10,6 @@ RUN npm ci --only=production
 # Bundle app source
 COPY . .
 
-EXPOSE 5050
+EXPOSE 5000
 
 CMD [ "npm", "start" ]

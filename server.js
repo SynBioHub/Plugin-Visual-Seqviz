@@ -7,7 +7,7 @@ const serialize = require("serialize-javascript");
 import filesToParts from "./io/filesToParts";
 
 const app = express()
-const port = 5050
+const port = 5000
 const addr = "localhost"
 
 app.use(express.json());
@@ -103,7 +103,7 @@ function getFileData(url, token=null) {
   return new Promise((resolve, reject) => {
     const options = {
       url: url,
-      headers: {}
+      headers: {"Accept": "text/plain"}
     };
     if (token) {
       options.headers['X-authorization'] = token;
